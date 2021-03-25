@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <view id="homePage">
+    <page>/pages/homePage.jspx</page>
+  </view>
+  <view id="parametersPage">
+    <page>/pages/parametersPage.jspx</page>
+  </view>
+  <view id="usersPage">
+    <page>/pages/usersPage.jspx</page>
+  </view>
+  <view id="customsPage">
+    <page>/pages/customsPage.jspx</page>
+  </view>
+  <view id="uploadPage">
+    <page>/pages/uploadPage.jspx</page>
+  </view>
+  <view id="indexPage">
+    <page>/indexPage.jspx</page>
+  </view>
+  <view id="footerOLS">
+    <page>/images/footerOLS.png</page>
+  </view>
+  <view id="logoOLS-rec">
+    <page>/images/logoOLS-rec.png</page>
+  </view>
+  <view id="incidentsPage">
+    <page>/pages/incidentsPage.jspx</page>
+  </view>
+  <view id="reportFullPage">
+    <page>/pages/reportFullPage.jspx</page>
+  </view>
+  <view id="reportPeriodPage">
+    <page>/pages/reportPeriodPage.jspx</page>
+  </view>
+  <control-flow-rule id="__2">
+    <from-activity-id>*</from-activity-id>
+    <control-flow-case id="__3">
+      <from-outcome>homePage</from-outcome>
+      <to-activity-id>homePage</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__5">
+      <from-outcome>parametersPage</from-outcome>
+      <to-activity-id>parametersPage</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__9">
+      <from-outcome>usersPage</from-outcome>
+      <to-activity-id>usersPage</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__10">
+      <from-outcome>customsPage</from-outcome>
+      <to-activity-id>customsPage</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__12">
+      <from-outcome>uploadPage</from-outcome>
+      <to-activity-id>uploadPage</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__14">
+      <from-outcome>incidentsPage</from-outcome>
+      <to-activity-id>incidentsPage</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__16">
+      <from-outcome>reportFullPage</from-outcome>
+      <to-activity-id>reportFullPage</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__17">
+      <from-outcome>reportPeriodPage</from-outcome>
+      <to-activity-id>reportPeriodPage</to-activity-id>
+    </control-flow-case>
+  </control-flow-rule>
+  <managed-bean id="__1">
+    <managed-bean-name>LoginBean</managed-bean-name>
+    <managed-bean-class>mx.com.ols.fiscal.view.front.beans.LoginBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__4">
+    <managed-bean-name>ParametersBean</managed-bean-name>
+    <managed-bean-class>mx.com.ols.fiscal.view.front.beans.ParametersBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__6">
+    <managed-bean-name>UserInfoBean</managed-bean-name>
+    <managed-bean-class>mx.com.ols.fiscal.view.front.beans.users.UserInfoBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__7">
+    <managed-bean-name>UserMenuBean</managed-bean-name>
+    <managed-bean-class>mx.com.ols.fiscal.view.front.beans.users.UserMenuBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__8">
+    <managed-bean-name>UsersBean</managed-bean-name>
+    <managed-bean-class>mx.com.ols.fiscal.view.front.beans.UsersBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__11">
+    <managed-bean-name>CustomsBean</managed-bean-name>
+    <managed-bean-class>mx.com.ols.fiscal.view.front.beans.CustomsBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__13">
+    <managed-bean-name>UploadBean</managed-bean-name>
+    <managed-bean-class>mx.com.ols.fiscal.view.front.beans.UploadBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__15">
+    <managed-bean-name>IncidentsBean</managed-bean-name>
+    <managed-bean-class>mx.com.ols.fiscal.view.front.beans.IncidentsBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__18">
+    <managed-bean-name>ReportFullBean</managed-bean-name>
+    <managed-bean-class>mx.com.ols.fiscal.view.front.beans.ReportFullBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__19">
+    <managed-bean-name>ReportPeriodBean</managed-bean-name>
+    <managed-bean-class>mx.com.ols.fiscal.view.front.beans.ReportPeriodBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__20">
+    <managed-bean-name>HomeBean</managed-bean-name>
+    <managed-bean-class>mx.com.ols.fiscal.view.front.beans.HomeBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+</adfc-config>

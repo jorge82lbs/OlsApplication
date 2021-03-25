@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="12.1.3.10.8" id="reportPeriodPagePageDef"
+                Package="pages">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="OlsSatClientsByPeriodVw1" RangeSize="25" DataControl="OlsAppModuleDataControl"
+              id="OlsSatClientsByPeriodVw1Iterator"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="OlsSatClientsByPeriodVw1Iterator" id="OlsSatClientsByPeriodVw1">
+      <nodeDefinition DefName="mx.com.ols.fiscal.model.vo.OlsSatClientsByPeriodVw" Name="OlsSatClientsByPeriodVw10">
+        <AttrNames>
+          <Item Value="RowId1"/>
+          <Item Value="IndYearPrm"/>
+          <Item Value="IndMonthPrm"/>
+          <Item Value="IdClientSat"/>
+          <Item Value="IndRfc"/>
+          <Item Value="IndCompany"/>
+          <Item Value="Alleged"/>
+          <Item Value="Definitive"/>
+          <Item Value="Unfulfilled"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>

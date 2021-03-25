@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document title="Soluciones Integrales Legales" id="d1" smallIconSource="/images/web-icon16x16.png">
+            <af:form id="FrmLogin" defaultCommand="BtnIngresar">
+                <af:resource type="javascript">
+                    function enforcePreventUserInput(evt) {                    
+                        var popup = AdfPage.PAGE.findComponentByAbsoluteId('p1oadLogin');
+                        if (popup != null) {
+                            AdfPage.PAGE.addBusyStateListener(popup, handleBusyState);
+                            evt.preventUserInput();
+                        }
+                    }
+                
+                    function handleBusyState(evt) {
+                        var popup = AdfPage.PAGE.findComponentByAbsoluteId('p1oadLogin');
+                        if (popup != null) {
+                            if (evt.isBusy()) {
+                                popup.show();
+                            }
+                            else {
+                                popup.hide();
+                                AdfPage.PAGE.removeBusyStateListener(popup, handleBusyState);
+                            }
+                        }
+                    }        
+                </af:resource>
+                <af:panelStretchLayout id="PnlIdxPrincipal" bottomHeight="120px"
+                               inlineStyle="border-style:none;" topHeight="124px">
+                    <f:facet name="top">
+                        <af:panelStretchLayout id="PnlLoginTop" styleClass="AFStretchWidth" 
+                        inlineStyle="background-color:#EDF2F7; 
+                        border-style:dotted; border-width:1px;border-color:#9DBEED;"
+                                               startWidth="133px">
+                            <f:facet name="start">        
+                                <af:panelGroupLayout id="PnlLoginLogo" halign="left" valign="top"  layout="vertical"
+                                inlineStyle="border-style:none;">
+                                    <af:spacer width="2" height="5" id="Spcd3"/>
+                                    <af:panelGroupLayout id="PnlLoginLogo2" valign="top"  layout="horizontal"
+                                    inlineStyle="border-style:none;">
+                                    <af:spacer width="11" height="5" id="Spcd32"/>
+                                        <af:image source="/images/websmall.jpg" shortDesc="Administration" id="ImgLoginLogo"/>
+                                    </af:panelGroupLayout>
+                                </af:panelGroupLayout>                        
+                            </f:facet>
+                            <f:facet name="center"> 
+                                <af:panelFormLayout id="PnlLoginLogoLbl" inlineStyle="border-style:none;">
+                                    <af:spacer width="2" height="15" id="SpcLogin3"/>
+                                    <af:outputLabel value="Abogados Fiscales - Soluciones Legales" id="LblhdrInfo"
+                                                    inlineStyle="color:Navy; font-size:xx-large;"/>
+                                    <af:outputLabel value="Administraci&#243;n de Clientes" id="LblhdrInfoSma"
+                                                    inlineStyle="color:Orange; font-size:x-large;"/>
+                                </af:panelFormLayout>
+                            </f:facet>                            
+                        </af:panelStretchLayout>
+                    </f:facet>
+                    <f:facet name="center">
+                        <af:panelGroupLayout id="PnlUsrPwd" valign="middle"
+                                         halign="center"
+                                         layout="vertical"
+                                         inlineStyle="border-style:none;">
+                            <af:spacer width="10" height="28" id="SpcLogin1"/>
+                            <af:panelFormLayout id="PnlFrmLoginMsg" visible="true">
+                                <af:panelGroupLayout id="PnlLoginInfo" valign="top" layout="horizontal">
+                                    <af:outputLabel value="" id="LblInfo"/>
+                                </af:panelGroupLayout>
+                            </af:panelFormLayout>
+                            <af:spacer width="10" height="25" id="SpcLogin2"/>
+                            <af:panelFormLayout id="PnlFrmLoginInfo"
+                                      inlineStyle="width:350.0px; background-color:#EDF2F7; border-color:#9DBEED; 
+                                      border-style:dotted; border-width:1px;">
+                                <af:spacer width="10" height="10" id="SpcLogi3n3"/>
+                                <af:outputLabel value="Bienvenido" id="LblInst"
+                                      inlineStyle="color:#FF801A; font-weight:bold; font-size:14px;"/>
+                                <af:spacer width="10" height="10" id="SpcLogin4"/>
+                                <af:inputText label="Usuario:" id="TxtUsuario" 
+                                              binding="#{LoginBean.poUserName}"
+                                              partialTriggers="BtnClear"/>
+                                <af:spacer width="10" height="10" id="SpcLogin5"/>
+                                <af:inputText label="Contraseña:" id="TxtPassword" secret="true" 
+                                              partialTriggers="BtnClear"
+                                              binding="#{LoginBean.poPassword}"/>
+                                <af:spacer width="10" height="10" id="SpcLogin6"/>
+                                <af:panelGroupLayout id="PnlLoginButt" valign="top" layout="horizontal"
+                                       inlineStyle="border-style:none;">
+                                    <af:button text="Ingresar" id="BtnIngresar"
+                                        icon="/images/login-icon.png" action="#{LoginBean.loginAction}">
+                                        <af:clientListener method="enforcePreventUserInput" type="action"/>
+                                    </af:button>
+                                    <af:spacer width="10" height="10" id="SpcLogin7"/>
+                                    <af:button text="Limpiar" id="BtnClear" icon="/images/restaurar.gif"
+                                        shortDesc="Limpiar" action="#{LoginBean.clearAction}"/>
+                                </af:panelGroupLayout>
+                                <af:spacer width="10" height="10" id="SpcLogin8"/>
+                            </af:panelFormLayout>
+                            <af:spacer width="10" height="40" id="SpcLogin38"/>
+                        </af:panelGroupLayout>
+                    </f:facet>                    
+                </af:panelStretchLayout>
+                <!-- ################################### POPUP LOADING VALIDADNDO. ############################### !-->
+                <af:popup id="p1oadLogin" contentDelivery="immediate">
+                  <af:dialog id="dLogin" type="none" title="Validando Información del Usuario" closeIconVisible="false">
+                    <af:panelGroupLayout id="Pnlpgl1Login" layout="vertical" halign="center">
+                      <af:image source="/images/atom-logo.gif" id="ImgIdxLoad" shortDesc="Cargando..."/>
+                      <af:outputText value="... por favor espere." id="LblIdxLoad1Login"/>
+                    </af:panelGroupLayout>
+                  </af:dialog>
+                </af:popup>
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>
+

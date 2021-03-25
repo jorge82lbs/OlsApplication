@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document title="OLS- Inicio" id="d1" smallIconSource="/images/web-icon16x16.png">
+            <af:form id="f1" usesUpload="true">
+                <af:pageTemplate viewId="/templates/olsTemplate.jspx" id="pt1">
+                    <f:facet name="content">
+                    <af:panelGroupLayout layout="scroll" id="PnlCont"
+                                             inlineStyle="border-style:none;">
+                        <af:spacer id="SpcAx" width="10" height="5"/>
+                        <af:button text=" Ver URL - OLS" id="BtnGetOlsUrl" icon="/images/aceptar.gif"
+                                   shortDesc="Obtiene ruta"
+                                   action="#{HomeBean.getOlsUrlAction}"/>
+                        <af:spacer width="25" height="5"  visible="true" id="Spcdc33"/>
+                        <af:outputText value="outputText1" id="ot1" visible="false" partialTriggers="BtnGetOlsUrl"
+                                       binding="#{HomeBean.lsOrlsUrl}" inlineStyle="font-size:large;"/>
+                           
+                            
+                        </af:panelGroupLayout>
+                    </f:facet>
+                </af:pageTemplate>
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>

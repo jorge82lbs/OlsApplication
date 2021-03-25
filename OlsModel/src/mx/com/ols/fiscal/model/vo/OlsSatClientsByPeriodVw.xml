@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="OlsSatClientsByPeriodVw"
+  Version="12.1.3.10.8"
+  InheritPersonalization="merge"
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  PageIterMode="Full"
+  RowClass="mx.com.ols.fiscal.model.vo.OlsSatClientsByPeriodVwRowImpl"
+  ComponentClass="mx.com.ols.fiscal.model.vo.OlsSatClientsByPeriodVwImpl">
+  <DesignTime>
+    <Attr Name="_isExpertMode" Value="true"/>
+    <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
+    <Attr Name="_isCodegen" Value="true"/>
+  </DesignTime>
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="mx.com.ols.fiscal.model.vo.OlsSatClientsByPeriodVw_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <Variable
+    Name="lstAnio"
+    Kind="where"
+    Type="java.lang.Integer"/>
+  <Variable
+    Name="lstMes"
+    Kind="where"
+    Type="java.lang.String"/>
+  <SQLQuery><![CDATA[SELECT   OLS.ROWID ROW_ID, 
+            :lstAnio IND_YEAR_PRM, 
+            :lstMes IND_MONTH_PRM, 
+            OLS.ID_CLIENT_SAT, 
+            OLS.IND_RFC, 
+            OLS.IND_COMPANY,             
+            (SELECT   COUNT (1) 
+               FROM   OLS.OLS_CAT_SAT_ALLEGED_TAB SUP 
+              WHERE   SUP.IND_RFC_ALG LIKE '%' || OLS.IND_RFC || '%' 
+                AND   SUP.IND_YEAR   = :lstAnio 
+                AND   SUP.IND_MONTH  = :lstMes 
+            ) 
+               ALLEGED, 
+            (SELECT   COUNT (1) 
+               FROM   OLS.OLS_CAT_SAT_DEFINITIVE_TAB DFN 
+              WHERE   DFN.IND_RFC_DFN LIKE '%' || OLS.IND_RFC || '%' 
+                AND   DFN.IND_YEAR   = :lstAnio 
+                AND   DFN.IND_MONTH  = :lstMes 
+            ) 
+               DEFINITIVE, 
+            (SELECT   COUNT (1) 
+               FROM   OLS.OLS_CAT_SAT_UNFULFILLED_TAB UNF 
+              WHERE   UNF.IND_RFC_UNF LIKE '%' || OLS.IND_RFC || '%' 
+                AND   UNF.IND_YEAR   = :lstAnio 
+                AND   UNF.IND_MONTH  = :lstMes 
+            ) 
+               UNFULFILLED 
+     FROM   OLS.OLS_CAT_SAT_CLIENTS_OLS_TAB OLS]]></SQLQuery>
+  <ViewAttribute
+    Name="RowId1"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.RowID"
+    ColumnType="ROWID"
+    AliasName="ROW_ID"
+    Expression="ROW_ID"
+    SQLType="ROWID"/>
+  <ViewAttribute
+    Name="IndYearPrm"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="IND_YEAR_PRM"
+    Expression="IND_YEAR_PRM"
+    SQLType="VARCHAR"/>
+  <ViewAttribute
+    Name="IndMonthPrm"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="IND_MONTH_PRM"
+    Expression="IND_MONTH_PRM"
+    SQLType="VARCHAR"/>
+  <ViewAttribute
+    Name="IdClientSat"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.math.BigDecimal"
+    ColumnType="NUMBER"
+    AliasName="ID_CLIENT_SAT"
+    Expression="ID_CLIENT_SAT"
+    SQLType="NUMERIC"/>
+  <ViewAttribute
+    Name="IndRfc"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="100"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="IND_RFC"
+    Expression="IND_RFC"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="100"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="IndCompany"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="350"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="IND_COMPANY"
+    Expression="IND_COMPANY"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="350"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Alleged"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.math.BigDecimal"
+    ColumnType="NUMBER"
+    AliasName="ALLEGED"
+    Expression="ALLEGED"
+    SQLType="NUMERIC"/>
+  <ViewAttribute
+    Name="Definitive"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.math.BigDecimal"
+    ColumnType="NUMBER"
+    AliasName="DEFINITIVE"
+    Expression="DEFINITIVE"
+    SQLType="NUMERIC"/>
+  <ViewAttribute
+    Name="Unfulfilled"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.math.BigDecimal"
+    ColumnType="NUMBER"
+    AliasName="UNFULFILLED"
+    Expression="UNFULFILLED"
+    SQLType="NUMERIC"/>
+  <AttrArray Name="KeyAttributes">
+    <Item Value="RowId1"/>
+  </AttrArray>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="mx.com.ols.fiscal.model.OlsModelBundle"/>
+  </ResourceBundle>
+</ViewObject>

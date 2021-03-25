@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>calificadorFiscal</title>
+        <script type="text/javascript">
+       
+        function valida_calificador_fiscal (pstcta, pstscalif){
+            
+            var lstResult = '';
+            var case01Cta = ['003','009','012','014','018','019','033','034','036','037','123','129','132','135','141','145','146','148','149','150','161','162','163','164','165','166','167','168','204','207','208','213','219','231','234','249','260','265','266','267','270','273','277','278','279','282','285','288','291','297','298','300','303','305','306','307','308'];
+            
+            var case02Cta = ['190','195','237','243','245','246'];
+            var case02Calif = ['000','003'];
+            
+            var case03Cta = ['117','126','153','154','155','156','157','158','159','160','183'];
+            var case03Calif = ['000','001','002','101','102','103','104','105','106','107','108','109','110','111','112'];
+            
+            var case04Cta = ['050'];
+            var case04Calif = ['000','001','002','101','102','103','104','105','106','107','108','109','110','111','112','201','202','203','204','205','206','207','208','209','210'];
+            
+            var case05Cta = ['255'];
+            var case05Calif = ['000','001','002','401','402','403','404'];
+            
+            var case06Cta = ['015','210','217'];
+            var case06Calif = ['000','001','002','501','502','503','504'];
+            
+            var case07Cta = ['515','615','897','921','963'];
+            var case07Calif = ['000','101','102','103','104','105','106','107','108','109','110','111','112' ,'205'];
+            
+            var case08Cta = ['415','425','455','465','475','485','495','933'];
+            var case08Calif = ['000','101','102','103','104','105','106','107','108','109','110','111','112','201','202','203','204','205','206','207','208','209','210'];
+            
+            var case09Cta = ['927'];
+            var case09Calif = ['000','201','202','203','204','205','206','207','208','209','210','401','402','403','404'];
+            
+            var case10Cta = ['315','335','345','891'];
+            var case10Calif = ['000','401','402','403','404'];
+            
+            var case11Cta = ['021'];
+            var case11Calif = ['000','501','502','503','504'];
+            
+            var case12Cta = ['201'];
+            var case12Calif = ['000','001','002','003','501','502','503','504'];
+            
+            if(findElementOnList(case01Cta, pstcta) == 1){
+                lstResult = '000'; 
+            }
+            
+            
+            if(findElementOnList(case02Cta, pstcta) == 1){
+                if(pstscalif != null){                 
+                    if(findElementOnList(case02Calif, pstscalif) == 0){
+                        lstResult = '000';
+                    }else{
+                        lstResult = pstscalif;
+                    }
+                }
+            }
+            
+            if(findElementOnList(case03Cta, pstcta) == 1){
+                if(pstscalif != null){                 
+                    if(findElementOnList(case03Calif, pstscalif) == 0){
+                        lstResult = '000';
+                    }else{
+                        lstResult = pstscalif;
+                    }
+                }
+            }
+            if(findElementOnList(case04Cta, pstcta) == 1){
+                if(pstscalif != null){                 
+                    if(findElementOnList(case04Calif, pstscalif) == 0){
+                        lstResult = '000';
+                    }else{
+                        lstResult = pstscalif;
+                    }
+                }
+            }
+            
+            if(findElementOnList(case05Cta, pstcta) == 1){
+                if(pstscalif != null){                 
+                    if(findElementOnList(case05Calif, pstscalif) == 0){
+                        lstResult = '000';
+                    }else{
+                        lstResult = pstscalif;
+                    }
+                }
+            }
+            if(findElementOnList(case06Cta, pstcta) == 1){
+                if(pstscalif != null){                 
+                    if(findElementOnList(case06Calif, pstscalif) == 0){
+                        lstResult = '000';
+                    }else{
+                        lstResult = pstscalif;
+                    }
+                }
+            }
+            if(findElementOnList(case07Cta, pstcta) == 1){
+                if(pstscalif != null){                 
+                    if(findElementOnList(case07Calif, pstscalif) == 0){
+                        lstResult = '000';
+                    }else{
+                        lstResult = pstscalif;
+                    }
+                }
+            }
+            if(findElementOnList(case08Cta, pstcta) == 1){
+                if(pstscalif != null){                 
+                    if(findElementOnList(case08Calif, pstscalif) == 0){
+                        lstResult = '000';
+                    }else{
+                        lstResult = pstscalif;
+                    }
+                }
+            }
+            if(findElementOnList(case09Cta, pstcta) == 1){
+                if(pstscalif != null){                 
+                    if(findElementOnList(case09Calif, pstscalif) == 0){
+                        lstResult = '000';
+                    }else{
+                        lstResult = pstscalif;
+                    }
+                }
+            }
+            if(findElementOnList(case10Cta, pstcta) == 1){
+                if(pstscalif != null){                 
+                    if(findElementOnList(case10Calif, pstscalif) == 0){
+                        lstResult = '000';
+                    }else{
+                        lstResult = pstscalif;
+                    }
+                }
+            }
+            if(findElementOnList(case11Cta, pstcta) == 1){
+                if(pstscalif != null){                 
+                    if(findElementOnList(case11Calif, pstscalif) == 0){
+                        lstResult = '000';
+                    }else{
+                        lstResult = pstscalif;
+                    }
+                }
+            }
+            
+            if(findElementOnList(case12Cta, pstcta) == 1){
+                if(pstscalif != null){                 
+                    if(findElementOnList(case12Calif, pstscalif) == 0){
+                        lstResult = '000';
+                    }else{
+                        lstResult = pstscalif;
+                    }
+                }
+            }
+                 
+            alert('Parameters: CTA['+pstcta+'] y CalificadorFiscal['+pstscalif+'] Validacion:['+lstResult+']');
+            
+            
+        };
+        
+        function findElementOnList(pstList, pstElement){
+            var linReturn = 0;
+            var lbFlag = 0;
+            var liI = 0;
+            while(lbFlag == 0 && liI < pstList.length){                
+                if(pstElement == pstList[liI]){
+                    lbFlag = 1;
+                    linReturn = 1;
+                }
+                liI++;   
+            }
+            return linReturn;
+        };
+        
+        </script>
+    </head>
+    <body>
+    <label for="lCuenta">Cuenta:</label><input type="text" id="pCuenta" name="pCuenta" title="Cuenta" ><br><br> 
+    <label for="lCalf">Calificador Fiscal:</label><input type="text" id="pCalif" name="pCalif" title="Calif" ><br><br> 
+    <button onclick="valida_calificador_fiscal(pCuenta.value,pCalif.value)"> Click!!! </button><br><br> 
+    </body>
+</html>

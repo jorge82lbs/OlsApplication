@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="12.1.3.10.47" id="uploadPagePageDef"
+                Package="pages">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="OlsCatSatUnfulfilledTabView1" RangeSize="25" DataControl="OlsAppModuleDataControl"
+              id="OlsCatSatUnfulfilledTabView1Iterator"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="OlsCatSatUnfulfilledTabView1Iterator" id="OlsCatSatUnfulfilledTabView1">
+      <nodeDefinition DefName="mx.com.ols.fiscal.model.OlsCatSatUnfulfilledTabView"
+                      Name="OlsCatSatUnfulfilledTabView10">
+        <AttrNames>
+          <Item Value="IdClientUnf"/>
+          <Item Value="IdRequest"/>
+          <Item Value="NumNumber"/>
+          <Item Value="FecPeriod"/>
+          <Item Value="NumMonth"/>
+          <Item Value="IndYear"/>
+          <Item Value="IndMonth"/>
+          <Item Value="IndPeriod"/>
+          <Item Value="IndRfcUnf"/>
+          <Item Value="IndCompany"/>
+          <Item Value="IndTypePerson"/>
+          <Item Value="IndSupposed"/>
+          <Item Value="FecPublication"/>
+          <Item Value="NumAmount"/>
+          <Item Value="FecPublicationLaw"/>
+          <Item Value="IndEstatus"/>
+          <Item Value="AttributeCategory"/>
+          <Item Value="Attribute1"/>
+          <Item Value="Attribute2"/>
+          <Item Value="Attribute3"/>
+          <Item Value="Attribute4"/>
+          <Item Value="Attribute5"/>
+          <Item Value="Attribute6"/>
+          <Item Value="Attribute7"/>
+          <Item Value="Attribute8"/>
+          <Item Value="Attribute9"/>
+          <Item Value="Attribute10"/>
+          <Item Value="Attribute11"/>
+          <Item Value="Attribute12"/>
+          <Item Value="Attribute13"/>
+          <Item Value="Attribute14"/>
+          <Item Value="Attribute15"/>
+          <Item Value="FecCreationDate"/>
+          <Item Value="NumCreatedBy"/>
+          <Item Value="FecLastUpdateDate"/>
+          <Item Value="NumLastUpdatedBy"/>
+          <Item Value="NumLastUpdateLogin"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>

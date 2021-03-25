@@ -1,0 +1,440 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document title="Carga de Archivos" id="d1" smallIconSource="/images/web-icon16x16.png">
+            <af:messages id="m1"/>
+            <af:form id="f1" usesUpload="true">
+            <af:resource type="javascript">
+                    function enforcePreventUserInput(evt) {                    
+                        var popup = AdfPage.PAGE.findComponentByAbsoluteId('popLoading');
+                        if (popup != null) {
+                            AdfPage.PAGE.addBusyStateListener(popup, handleBusyState);
+                            evt.preventUserInput();
+                        }
+                    }
+                
+                    function handleBusyState(evt) {
+                        var popup = AdfPage.PAGE.findComponentByAbsoluteId('popLoading');
+                        if (popup != null) {
+                            if (evt.isBusy()) {
+                                popup.show();
+                            }
+                            else {
+                                popup.hide();
+                                AdfPage.PAGE.removeBusyStateListener(popup, handleBusyState);
+                            }
+                        }
+                    }        
+                </af:resource>
+                <af:pageTemplate viewId="/templates/olsTemplate.jspx" id="pt1">
+                    <f:facet name="content">
+                    <af:panelGroupLayout layout="scroll" id="PnlCont"
+                                             inlineStyle="border-style:none;">
+                            <af:panelHeader text="Carga de Información" id="PnlHead"
+                                type="default"
+                                messageType="none"
+                                shortDesc="Carga de Información"
+                                inlineStyle="border-style:none;">
+                            <f:facet name="toolbar">
+                                <af:statusIndicator id="StiIndicator" shortDesc="Status Indicator"/>
+                            </f:facet>
+                            </af:panelHeader>
+                            <af:separator id="sepTitle"/>
+                            <af:panelGroupLayout layout="horizontal" id="PnlParGenTbl" styleClass="AFStretchWidth"
+                                                 valign="top" halign="left" 
+                                                 inlineStyle="border-style:none; height:415px;">
+                            <af:panelGridLayout id="pglf2">
+                                <af:gridRow marginTop="5px" height="auto" marginBottom="5px" id="gr1">
+                                    <af:gridCell marginStart="5px" width="30%" id="gc1">
+                                        <af:panelGroupLayout id="pgl1v" layout="vertical">
+                                        <af:separator id="sepMinutesMdin"/>
+                                            <af:link icon="/images/icon_info.gif"
+                                                 id="Lnkview" text="Plantilla de No Localizados"
+                                                 inlineStyle="text-align:center;"
+                                                 visible="true" targetFrame="_blank"
+                                                 destination="https://drive.google.com/file/d/1whT8l845kX99tpQUwOJVnZJgobIIPKJx/view?usp=sharing"
+                                                 shortDesc="Ver Plantilla">
+                                            </af:link>
+                                               
+                                                <af:panelGroupLayout id="pgl1" layout="horizontal">
+                                                <af:outputLabel value="No Localizados" id="LblTemi"
+                                                                inlineStyle="color:#FF801A; font-size:small; font-weight:bold;"/> 
+                                            </af:panelGroupLayout>
+                                            
+                                            <af:panelGroupLayout id="pgl1hiMin" layout="horizontal">
+                                                <af:inputNumberSpinbox label="Año" id="TxtAnio4" visible="false"
+                                                        binding="#{UploadBean.poYearInc}" minimum="2017"
+                                                        columns="5"/>
+                                            </af:panelGroupLayout>
+                                            <af:panelGroupLayout id="pgl1hiDlh" layout="horizontal"> 
+                                                <af:selectOneChoice label="Mes" id="soc1"  visible="false"
+                                                binding="#{UploadBean.poSelMonthInc}">
+                                                    <af:selectItem label="ENERO" value="ENERO" id="si1"/>
+                                                    <af:selectItem label="FEBRERO" value="FEBRERO" id="si2"/>
+                                                    <af:selectItem label="MARZO" value="MARZO" id="si3"/>
+                                                    <af:selectItem label="ABRIL" value="ABRIL" id="si4"/>
+                                                    <af:selectItem label="MAYO" value="MAYO" id="si5"/>
+                                                    <af:selectItem label="JUNIO" value="JUNIO" id="si6"/>
+                                                    <af:selectItem label="JULIO" value="JULIO" id="si7"/>
+                                                    <af:selectItem label="AGOSTO" value="AGOSTO" id="si8"/>
+                                                    <af:selectItem label="SEPTIEMBRE" value="SEPTIEMBRE" id="si9"/>
+                                                    <af:selectItem label="OCTUBRE" value="OCTUBRE" id="si10"/>
+                                                    <af:selectItem label="NOVIEMBRE" value="NOVIEMBRE" id="si11"/>
+                                                    <af:selectItem label="DICIEMBRE" value="DICIEMBRE" id="si12"/>
+                                                </af:selectOneChoice>
+                                            </af:panelGroupLayout>
+                                            <af:panelGroupLayout id="pgl1hiFile" layout="horizontal" visible="false">
+                                                    <af:selectBooleanCheckbox text=" " binding="#{UploadBean.poNoLocDelete}"
+                                                                              label="Eliminar Información Anterior?" id="sbc1"/>
+                                                    <af:link icon="/images/icon_info.gif"
+                                                         id="Lnkview2"
+                                                         inlineStyle="text-align:center;"
+                                                         visible="true"
+                                                         actionListener="#{UploadBean.showLastInfoPopup}"
+                                                         shortDesc="Fecha de última Actualización">
+                                                    </af:link>
+                                                </af:panelGroupLayout>
+                                                
+                                            
+                                            <af:separator id="sepDeadLinehd3" visible="true"/>
+                                            <af:spacer width="2" height="33"  visible="false" id="Spcdc33"/>
+                                            <af:panelGroupLayout id="pgl1hi2File" layout="horizontal">
+                                                <af:inputFile label="Archivo" id="if21"
+                                                              binding="#{UploadBean.poFileSat}"/>
+                                            </af:panelGroupLayout>
+                                            <af:spacer width="2" height="33"  visible="false" id="Spcdc33f"/>
+                                            <af:separator id="sepDeadLineh3" visible="true"/>
+                                            <af:panelGroupLayout id="pgl1hiBtn" layout="horizontal">
+                                                <af:button text="Aceptar No Localizado" id="b1"
+                                                           action="#{UploadBean.uploadUnfulfilledAction}">
+                                                    <af:clientListener method="enforcePreventUserInput" type="action"/>
+                                                </af:button>
+                                            </af:panelGroupLayout>
+                                        </af:panelGroupLayout>
+
+                                        <af:spacer width="2" height="15" id="Spcd33"/>
+                                        <af:separator id="sepMinutesMin"/>
+                                        <af:panelGroupLayout id="pgl1vDf" layout="vertical">
+                                        <af:link icon="/images/icon_info.gif"
+                                                 id="LnkviewDef" text="Plantilla de Definitivos"
+                                                 inlineStyle="text-align:center;"
+                                                 visible="true" targetFrame="_blank"
+                                                 destination="https://drive.google.com/file/d/11a1NhMAAhERmoWT6GfoYGybInZcTXR7T/view?usp=sharing"
+                                                 shortDesc="Ver Plantilla">
+                                        </af:link>
+                                            <af:panelGroupLayout id="pgl1Df" layout="horizontal">
+                                                <af:outputLabel value="Definitivos" id="LblTemiDf"
+                                                                inlineStyle="color:#FF801A; font-size:small; font-weight:bold;"/> 
+                                            </af:panelGroupLayout>
+                                            
+                                            <af:panelGroupLayout id="pgl1fDf" layout="horizontal">
+                                                <af:inputNumberSpinbox label="Año" id="TxtAnioDef"  visible="false"
+                                                        binding="#{UploadBean.poYearDef}" minimum="2017"
+                                                        columns="5"/>
+                                            </af:panelGroupLayout>
+                                            
+                                            <af:panelGroupLayout id="pgl1hiDlhDf" layout="horizontal"> 
+                                                <af:selectOneChoice label="Mes" id="soc1Df" visible="false"
+                                                binding="#{UploadBean.poSelMonthDef}" >
+                                                    <af:selectItem label="ENERO" value="ENERO" id="si1Df"/>
+                                                    <af:selectItem label="FEBRERO" value="FEBRERO" id="si2Df"/>
+                                                    <af:selectItem label="MARZO" value="MARZO" id="si3Df"/>
+                                                    <af:selectItem label="ABRIL" value="ABRIL" id="si4Df"/>
+                                                    <af:selectItem label="MAYO" value="MAYO" id="si5Df"/>
+                                                    <af:selectItem label="JUNIO" value="JUNIO" id="si6Df"/>
+                                                    <af:selectItem label="JULIO" value="JULIO" id="si7Df"/>
+                                                    <af:selectItem label="AGOSTO" value="AGOSTO" id="si8Df"/>
+                                                    <af:selectItem label="SEPTIEMBRE" value="SEPTIEMBRE" id="si9Df"/>
+                                                    <af:selectItem label="OCTUBRE" value="OCTUBRE" id="si10Df"/>
+                                                    <af:selectItem label="NOVIEMBRE" value="NOVIEMBRE" id="si11Df"/>
+                                                    <af:selectItem label="DICIEMBRE" value="DICIEMBRE" id="si12Df"/>
+                                                </af:selectOneChoice>
+                                            </af:panelGroupLayout>
+                                            
+                                            <af:separator id="sepDeadLehd3" visible="true"/>
+                                            <af:spacer width="2" height="33"  visible="false" id="Spcc33"/>
+                                            <af:panelGroupLayout id="pgl1hiFileDf" layout="horizontal">
+                                                <af:inputFile label="Archivo" id="if1Df"
+                                                              binding="#{UploadBean.poFileSatDfn}"/>
+                                            </af:panelGroupLayout>
+                                            <af:spacer width="2" height="33"  visible="false" id="Spcdc333f"/>
+                                            <af:separator id="sepDeadLinreh3" visible="true"/>
+                                            <af:panelGroupLayout id="pgl1hiBtnDf" layout="horizontal">
+                                                <af:button text="Aceptar Definitivos" id="b1Df"
+                                                           action="#{UploadBean.uploadSatDfnAction}">
+                                                    <af:clientListener method="enforcePreventUserInput" type="action"/>
+                                                </af:button>
+                                            </af:panelGroupLayout>
+                                        </af:panelGroupLayout>
+                                        
+                                        <af:spacer width="2" height="15" id="Spcd33Pre"/>
+                                        <af:separator id="sepDeadLineh3Df"/>
+                                        <af:panelGroupLayout id="pgl1vPre" layout="vertical">
+                                        
+                                        <af:link icon="/images/icon_info.gif"
+                                                 id="LnkviewPre" text="Plantilla de Presuntos"
+                                                 inlineStyle="text-align:center;"
+                                                 visible="true" targetFrame="_blank"
+                                                 destination="https://drive.google.com/file/d/1-8ugN7flojZWumIZ19cwpDrXiQK8rdxE/view?usp=sharing"
+                                                 shortDesc="Ver Plantilla">
+                                        </af:link>
+                                        
+                                            <af:panelGroupLayout id="pgl1Pre" layout="horizontal">
+                                                <af:outputLabel value="Presuntos" id="LblTemiPre"
+                                                                inlineStyle="color:#FF801A; font-size:small; font-weight:bold;"
+                                                                /> 
+                                            </af:panelGroupLayout>
+                                            
+                                            <af:panelGroupLayout id="pgl1fPre" layout="horizontal">
+                                               <af:inputNumberSpinbox label="Año" id="TxtAnioPre" visible="false"
+                                                        binding="#{UploadBean.poYearPre}" minimum="2017"
+                                                        columns="5"/>
+                                            </af:panelGroupLayout>
+                                            
+                                            <af:panelGroupLayout id="pgl1hiDlhPre" layout="horizontal"> 
+                                                <af:selectOneChoice label="Mes" id="soc1Pre" visible="false"
+                                                binding="#{UploadBean.poSelMonthPre}">
+                                                    <af:selectItem label="ENERO" value="ENERO" id="si1Pre"/>
+                                                    <af:selectItem label="FEBRERO" value="FEBRERO" id="si2Pre"/>
+                                                    <af:selectItem label="MARZO" value="MARZO" id="si3Pre"/>
+                                                    <af:selectItem label="ABRIL" value="ABRIL" id="si4Pre"/>
+                                                    <af:selectItem label="MAYO" value="MAYO" id="si5Pre"/>
+                                                    <af:selectItem label="JUNIO" value="JUNIO" id="si6Pre"/>
+                                                    <af:selectItem label="JULIO" value="JULIO" id="si7Pre"/>
+                                                    <af:selectItem label="AGOSTO" value="AGOSTO" id="si8Pre"/>
+                                                    <af:selectItem label="SEPTIEMBRE" value="SEPTIEMBRE" id="si9Pre"/>
+                                                    <af:selectItem label="OCTUBRE" value="OCTUBRE" id="si10Pre"/>
+                                                    <af:selectItem label="NOVIEMBRE" value="NOVIEMBRE" id="si11Pre"/>
+                                                    <af:selectItem label="DICIEMBRE" value="DICIEMBRE" id="si12Pre"/>
+                                                </af:selectOneChoice>
+                                            </af:panelGroupLayout>
+                                            <af:separator id="sepfDeadLehd3" visible="true"/>
+                                            <af:spacer width="2" height="33"  visible="false" id="Spfcc33"/>
+                                            <af:panelGroupLayout id="pgl1hiFilePre" layout="horizontal">
+                                                <af:inputFile label="Archivo" id="if1Pre"
+                                                              binding="#{UploadBean.poFileSatPre}"/>
+                                            </af:panelGroupLayout>
+                                            <af:spacer width="2" height="33"  visible="false" id="Sfpcdc333f"/>
+                                            <af:separator id="sepDeadfLinreh3" visible="true"/>
+
+                                            <af:panelGroupLayout id="pgl1hiBtnPre" layout="horizontal">
+                                                <af:button text="Aceptar Presuntos" id="b1Pre" 
+                                                           action="#{UploadBean.uploadSatPreAction}">
+                                                    <af:clientListener method="enforcePreventUserInput" type="action"/>
+                                                </af:button>
+                                            </af:panelGroupLayout>
+                                            <af:spacer width="2" height="15" id="Spcd33Prde"/>
+                                        <af:separator id="sepDeadLinehd3Df"/>
+                                            
+                                        </af:panelGroupLayout>
+                                    
+                                        
+                                        
+                                    </af:gridCell>
+                                    <af:gridCell marginStart="5px" width="70%" marginEnd="5px" id="gc2">
+                                        <af:panelGroupLayout id="pgl1vj" layout="vertical">
+                                        <af:separator id="sepMinutesMinj"/>
+                                        <af:link icon="/images/icon_info.gif"
+                                                 id="LnkviewCli" text="Plantilla de Clientes"
+                                                 inlineStyle="text-align:center;"
+                                                 visible="true" targetFrame="_blank"
+                                                 destination="https://drive.google.com/file/d/1YWkli3h9B4VaK7-R43a5TxYGvENczRgp/view?usp=sharing"
+                                                 shortDesc="Ver Plantilla">
+                                        </af:link>
+                                            <af:panelGroupLayout id="pgl1j" layout="horizontal">
+                                                <af:outputLabel value="Seleccione Clientes" id="LblTemij"
+                                                                inlineStyle="color:Blue; font-size:small; font-weight:bold;"/> 
+                                            </af:panelGroupLayout>
+                                            
+                                            <af:panelGroupLayout id="pgl1hiMinj" layout="horizontal">
+                                                <af:inputNumberSpinbox label="Año" id="ins1"  visible="false"
+                                                binding="#{UploadBean.poYearOls}" minimum="2017"
+                                                columns="5"/>
+                                            </af:panelGroupLayout>
+                                            <af:panelGroupLayout id="pgl1hiDljh" layout="horizontal"> 
+                                                <af:selectOneChoice label="Mes" id="soc1j" visible="false"
+                                                                    binding="#{UploadBean.poSelMonthOls}">
+                                                    <af:selectItem label="ENERO" value="ENERO" id="si1j"/>
+                                                    <af:selectItem label="FEBRERO" value="FEBRERO" id="si2j"/>
+                                                    <af:selectItem label="MARZO" value="MARZO" id="si3j"/>
+                                                    <af:selectItem label="ABRIL" value="ABRIL" id="si4j"/>
+                                                    <af:selectItem label="MAYO" value="MAYO" id="si5j"/>
+                                                    <af:selectItem label="JUNIO" value="JUNIO" id="si6j"/>
+                                                    <af:selectItem label="JULIO" value="JULIO" id="si7j"/>
+                                                    <af:selectItem label="AGOSTO" value="AGOSTO" id="si8j"/>
+                                                    <af:selectItem label="SEPTIEMBRE" value="SEPTIEMBRE" id="si9j"/>
+                                                    <af:selectItem label="OCTUBRE" value="OCTUBRE" id="si10j"/>
+                                                    <af:selectItem label="NOVIEMBRE" value="NOVIEMBRE" id="si11j"/>
+                                                    <af:selectItem label="DICIEMBRE" value="DICIEMBRE" id="si12j"/>
+                                                </af:selectOneChoice>
+                                            </af:panelGroupLayout>   
+                                            
+                                            <af:separator id="sepDeadLeghd3" visible="true"/>
+                                            <af:spacer width="2" height="33"  visible="false" id="Spcgc33"/>
+                                            <af:panelGroupLayout id="pgl1hiFilej" layout="horizontal">
+                                                <af:inputFile label="Archivo" id="if1j"
+                                                              binding="#{UploadBean.poFileOls}"/>
+                                            </af:panelGroupLayout>
+                                            <af:spacer width="2" height="33"  visible="false" id="Spcdcf333f"/>
+                                            <af:separator id="sepDeadLinfreh3" visible="true"/>
+                                            <af:panelGroupLayout id="pgl1hiBtn2" layout="horizontal">
+                                                <af:button text="Aceptar" id="b12" action="#{UploadBean.uploadSatOlsAction}">
+                                                <af:clientListener method="enforcePreventUserInput" type="action"/>
+                                                </af:button>
+                                            </af:panelGroupLayout>
+                                                  
+                                            <af:separator id="sepDeadLegdhd3" visible="true"/>
+                                            <af:panelGroupLayout id="pgl1hiFilePr" layout="horizontal" visible="true">
+                                                <af:link icon="/images/trash_deleteBAK.gif"
+                                                     id="Lnkview2Pr"
+                                                     inlineStyle="text-align:center;"
+                                                     visible="true" text="Eliminar Todos los Clientes"
+                                                     actionListener="#{UploadBean.showDeleteCliPopup}"
+                                                     shortDesc="Eliminar Información de CLIENTES">
+                                                </af:link>
+                                            </af:panelGroupLayout>                                                                              
+                                            <af:spacer width="2" height="15" id="Spcddd33"/>
+                                            <af:separator id="sepProvMinj"/>
+                                                                                        
+                                            <af:link icon="/images/icon_info.gif"
+                                                 id="LnkviewProv" text="Plantilla de Proveedores"
+                                                 inlineStyle="text-align:center;"
+                                                 visible="true" targetFrame="_blank"
+                                                 destination="https://drive.google.com/file/d/1spuaS6qYDSnamB7sbXlYOpqsDNK8mNlh/view?usp=sharing"
+                                                 shortDesc="Ver Plantilla">
+                                            </af:link>
+                                            <af:panelGroupLayout id="pgl1pr" layout="horizontal">
+                                                <af:outputLabel value="Seleccione Proveedores" id="LblTeprj"
+                                                                inlineStyle="color:Blue; font-size:small; font-weight:bold;"/> 
+                                            </af:panelGroupLayout>
+
+                                            <af:panelGroupLayout id="pgl1hiProv" layout="horizontal">
+                                                <af:inputNumberSpinbox label="Año" id="insProv" visible="false"
+                                                binding="#{UploadBean.poYearProv}" minimum="2017"
+                                                columns="5"/>
+                                            </af:panelGroupLayout>
+                                            <af:panelGroupLayout id="pgl1Prov" layout="horizontal"> 
+                                                <af:selectOneChoice label="Mes" id="socProv" visible="false"
+                                                                    binding="#{UploadBean.poSelMonthProv}">
+                                                    <af:selectItem label="ENERO" value="ENERO" id="si1Prov"/>
+                                                    <af:selectItem label="FEBRERO" value="FEBRERO" id="si2Prov"/>
+                                                    <af:selectItem label="MARZO" value="MARZO" id="si3Prov"/>
+                                                    <af:selectItem label="ABRIL" value="ABRIL" id="si4Prov"/>
+                                                    <af:selectItem label="MAYO" value="MAYO" id="si5Prov"/>
+                                                    <af:selectItem label="JUNIO" value="JUNIO" id="si6Prov"/>
+                                                    <af:selectItem label="JULIO" value="JULIO" id="si7Prov"/>
+                                                    <af:selectItem label="AGOSTO" value="AGOSTO" id="si8Prov"/>
+                                                    <af:selectItem label="SEPTIEMBRE" value="SEPTIEMBRE" id="si9Prov"/>
+                                                    <af:selectItem label="OCTUBRE" value="OCTUBRE" id="si10Prov"/>
+                                                    <af:selectItem label="NOVIEMBRE" value="NOVIEMBRE" id="si11Prov"/>
+                                                    <af:selectItem label="DICIEMBRE" value="DICIEMBRE" id="si12Prov"/>
+                                                </af:selectOneChoice>
+                                            </af:panelGroupLayout>
+                                                                                   
+                                            
+                                            <af:separator id="sepDeadLefhd3" visible="true"/>
+                                            <af:spacer width="2" height="33"  visible="false" id="Spcfc33"/>
+                                            <af:panelGroupLayout id="pgl1Provj" layout="horizontal">
+                                                <af:inputFile label="Archivo" id="if1Prov"
+                                                              binding="#{UploadBean.poFileProv}"/>
+                                            </af:panelGroupLayout>
+                                            <af:spacer width="2" height="33"  visible="false" id="Spcfdc333f"/>
+                                            <af:separator id="sepDeProv"/>
+                                            <af:panelGroupLayout id="pgl1Provn2" layout="horizontal">
+                                                <af:button text="Aceptar" id="b1Prov"
+                                                           action="#{UploadBean.uploadSatProvAction}">
+                                                <af:clientListener method="enforcePreventUserInput" type="action"/>
+                                                </af:button>
+                                            </af:panelGroupLayout>
+                                            
+                                            <af:separator id="sepDeadLfeghd3" visible="true"/>
+                                            <af:panelGroupLayout id="pgl1hidFilePr" layout="horizontal" visible="true">
+                                                <af:link icon="/images/trash_deleteBAK.gif"
+                                                     id="Lnkdview2Pr" text="Eliminar Todos los Proveedores"
+                                                     inlineStyle="text-align:center;"
+                                                     visible="true"
+                                                     actionListener="#{UploadBean.showDeleteProvPopup}"
+                                                     shortDesc="Eliminar Información de Proveedores">
+                                                </af:link>
+                                            </af:panelGroupLayout>
+                                            
+                                            
+                                            
+                                            <af:spacer width="2" height="15" id="Spcfddd33"/>
+                                            <af:separator id="sepProvMifnj"/>
+                                             <!--
+                                             <af:spacer width="2" height="33"  visible="false" id="Spcfdc333fcd"/>
+                                            <af:separator id="sepDeProvcd"/>
+                                            <af:panelGroupLayout id="pgl1Provn2cd" layout="horizontal">
+                                                <af:button text="Crear Reportes" id="b1Provcd"
+                                                           action="#{UploadBean.createAllReportsAction}">
+                                                <af:clientListener method="enforcePreventUserInput" type="action"/>
+                                                </af:button>
+                                            </af:panelGroupLayout>
+                                            -->
+                                             
+                                             
+                                             
+                                        </af:panelGroupLayout>
+                                    </af:gridCell>
+                                </af:gridRow>
+                            </af:panelGridLayout>
+                            </af:panelGroupLayout>
+                           </af:panelGroupLayout>                                        
+                    
+                    </f:facet>
+                </af:pageTemplate>
+                
+                <!-- ################################### POPUP ELIMINAR ######################################### !-->
+                <af:popup id="popupDelete" contentDelivery="lazyUncached"                          
+                          binding="#{UploadBean.poPopupDelete}">
+                  <af:panelWindow id="PnlDelete" 
+                               inlineStyle="border-style:none;"
+                               modal="true" 
+                               closeIconVisible="false"
+                               title="Eliminar" 
+                               titleIconSource="/images/page_user_light.gif">
+                    <af:panelGroupLayout layout="vertical" 
+                                      id="PnlDeleteWsMsg" 
+                                      inlineStyle="border-style:none;" 
+                                      valign="middle" 
+                                      halign="center">
+                      <af:spacer width="10" height="10" id="SpcLogin_41aDel"/>
+                      <af:panelLabelAndMessage id="PnlLblMsg"
+                                               inlineStyle="border-style:none; color:Olive;"
+                                               binding="#{UploadBean.poDeleteMsgLbl}"/>
+                         <af:spacer width="50" height="25" id="SpcPopDel01"/>
+                         <af:outputText id="TxtIdBindingsDelete" binding="#{UploadBean.poDeleteIdBinding}" 
+                         visible="false"/>
+                         <af:panelGroupLayout layout="horizontal" id="PnlEliminarBtns" inlineStyle="border-style:none;" 
+                         valign="middle" halign="center">
+                           <af:button text="Aceptar" id="BtnEliminarAceptar"
+                                             icon="/images/aceptar.gif"
+                                             action="#{UploadBean.deleteAction}">
+                                <af:clientListener method="enforcePreventUserInput" type="action"/>
+                            </af:button>
+                           <af:spacer width="10" height="25" id="SpcPopDel02"/>
+                           <af:button text="Cancelar" id="BtnEliminarCancelar"
+                                             icon="/images/cancelar.gif"
+                                             action="#{UploadBean.cancelDeleteAction}"/>
+                       </af:panelGroupLayout> 
+                    </af:panelGroupLayout>
+                  </af:panelWindow>
+                </af:popup>
+                
+                
+                <!-- ################################### POPUP LOADING .... ##################################### !-->
+                <af:popup id="popLoading" contentDelivery="immediate">
+                  <af:dialog id="dlgLoading" type="none" title="Procesando Información" closeIconVisible="false">
+                    <af:panelGroupLayout id="PnlLoading" layout="vertical" halign="center">
+                      <af:image source="/images/atom-logo.gif" id="ImgIdxLoad" shortDesc="Cargando..."/>
+                      <af:outputText value="... por favor espere." id="LblIdxLoad1Login"/>
+                    </af:panelGroupLayout>
+                  </af:dialog>
+                </af:popup>
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="12.1.3.10.8" id="reportFullPagePageDef"
+                Package="pages">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="OlsSatClientsFullVwView1" RangeSize="20" DataControl="OlsAppModuleDataControl"
+              id="OlsSatClientsFullVwView1Iterator"/>
+    <iterator Binds="OlsSatProvidersFullVwView1" RangeSize="25" DataControl="OlsAppModuleDataControl"
+              id="OlsSatProvidersFullVwView1Iterator"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="OlsSatClientsFullVwView1Iterator" id="OlsSatClientsFullVwView1">
+      <nodeDefinition DefName="mx.com.ols.fiscal.model.vo.OlsSatClientsFullVwView" Name="OlsSatClientsFullVwView10">
+        <AttrNames>
+          <Item Value="RowId1"/>
+          <Item Value="IdClientSat"/>
+          <Item Value="IndRfc"/>
+          <Item Value="IndCompany"/>
+          <Item Value="Alleged"/>
+          <Item Value="Definitive"/>
+          <Item Value="Unfulfilled"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="OlsSatProvidersFullVwView1Iterator" id="OlsSatProvidersFullVwView1">
+      <nodeDefinition DefName="mx.com.ols.fiscal.model.vo.OlsSatProvidersFullVwView" Name="OlsSatProvidersFullVwView10">
+        <AttrNames>
+          <Item Value="RowId1"/>
+          <Item Value="IdProvider"/>
+          <Item Value="IdClientSat"/>
+          <Item Value="IndRfcClient"/>
+          <Item Value="IndRfc"/>
+          <Item Value="IndCompany"/>
+          <Item Value="Alleged"/>
+          <Item Value="Definitive"/>
+          <Item Value="Unfulfilled"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>

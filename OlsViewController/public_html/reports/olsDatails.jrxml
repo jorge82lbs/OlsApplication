@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="olsDatails" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="89271e12-1a52-4264-918d-e23a82faa443">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="217"/>
+	<property name="ireport.y" value="0"/>
+	<style name="style1" fontName="Tw Cen MT"/>
+	<parameter name="pstRfc" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pstRfcDescription" class="java.lang.String"/>
+	<parameter name="pstNumProv" class="java.lang.String"/>
+	<parameter name="pstFecRec" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="pstFecRev" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="pstFecSat" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="pstFecDof" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="pstLugaryFecha" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT ID_CLIENT_SAT,
+       IND_RFC_CLIENT,
+       IND_RFC,
+       IND_COMPANY,
+       decode(ALLEGED,
+              0,' ',
+              1,'X',
+              '') ALLEGED,
+       decode(DEFINITIVE,
+              0,' ',
+              1,'X',
+              '') DEFINITIVE,
+       decode(UNFULFILLED,
+              0,' ',
+              1,'X',
+              '') UNFULFILLED
+  FROM OLS.OLS_SAT_PROVIDERS_FULL_VW
+  WHERE IND_RFC_CLIENT =  $P{pstRfc}
+  ORDER BY IND_COMPANY]]>
+	</queryString>
+	<field name="ID_CLIENT_SAT" class="java.math.BigDecimal"/>
+	<field name="IND_RFC_CLIENT" class="java.lang.String"/>
+	<field name="IND_RFC" class="java.lang.String"/>
+	<field name="IND_COMPANY" class="java.lang.String"/>
+	<field name="ALLEGED" class="java.lang.String"/>
+	<field name="DEFINITIVE" class="java.lang.String"/>
+	<field name="UNFULFILLED" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="335" splitType="Stretch">
+			<staticText>
+				<reportElement x="110" y="8" width="360" height="64" uuid="edc8702d-2272-4725-aeab-7930d3a6e477"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Georgia" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INFORME DE MONITOREO LISTADOS
+ARTÍCULO 69 Y 69-B CFF
+“LISTA NEGRA DEL SAT”]]></text>
+			</staticText>
+			<image>
+				<reportElement x="25" y="8" width="81" height="69" uuid="47d84696-5eb6-4f49-96e6-46402c3f1b08"/>
+				<imageExpression><![CDATA["images/logoOLS-rec.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="25" y="94" width="335" height="20" uuid="59517307-fdac-4d32-9dcf-479d6eb30edc"/>
+				<textElement>
+					<font fontName="Tw Cen MT" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pstRfc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="25" y="118" width="508" height="20" uuid="524c59eb-5368-47f7-af17-bee1d7c423e5"/>
+				<textElement>
+					<font fontName="Tw Cen MT" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pstRfcDescription}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="74" width="423" height="20" uuid="3a68cbe5-7c5c-4a72-bcb3-9854a329cd7e"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tw Cen MT" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pstLugaryFecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="25" y="145" width="512" height="95" uuid="ce6ce616-450b-4bac-8f2d-e24dd7ffafc5"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Tw Cen MT" size="12"/>
+				</textElement>
+				<text><![CDATA[Se hace de su conocimiento que una vez efectuada la revisión y monitoreo dentro de la última publicación realizada por el Servicio de Administración Tributaria del listado de contribuyentes incumplidos (artículo 69 CFF),  así como del listado tanto provisional como definitivo de contribuyentes que presuntamente facturan operaciones simuladas o inexistentes (artículo 69-B CFF), NO se encontraron registros de ningún nombre, denominación, razón social y/o RFC, de los contribuyentes del listado que nos fue proporcionado por Usted para su respectivo monitoreo; teniendo como resultado que a la fecha NINGUNO de sus datos ha sido publicado en los listados de la referida publicación.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="244" width="430" height="15" uuid="87216b7f-ef18-42f1-92ea-899861c21b2b"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tw Cen MT"/>
+				</textElement>
+				<text><![CDATA[Contribuyentes Monitoreados:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="261" width="430" height="15" uuid="e369bb31-da1a-4b6d-b245-42111d2602cf"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tw Cen MT"/>
+				</textElement>
+				<text><![CDATA[Fecha De Recepción Del Listado Monitoreado:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="295" width="430" height="15" uuid="9827efc3-8553-4c16-b668-8ec99419feac"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tw Cen MT"/>
+				</textElement>
+				<text><![CDATA[Fecha De Publicación Del Listado En La Página Del SAT:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="278" width="430" height="15" uuid="c0631caa-e06e-4202-8cfb-4e4e2095b62c"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tw Cen MT"/>
+				</textElement>
+				<text><![CDATA[Fecha De Revisión Y Monitoreo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="312" width="430" height="15" uuid="5c17677f-aa3b-4343-bb44-bee43b09509c"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tw Cen MT"/>
+				</textElement>
+				<text><![CDATA[Fecha De Publicación Del Listado En DOF:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="457" y="244" width="78" height="15" uuid="0c15b661-eb14-4fb1-b5ee-82c78dbb4827"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tw Cen MT" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pstNumProv}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="457" y="261" width="78" height="15" uuid="5e13c132-7283-45ee-bb6f-b1c97196a0ad"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tw Cen MT" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pstFecRec}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="457" y="278" width="78" height="15" uuid="6c72944c-249e-455c-9f7a-8d2621ae4191"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tw Cen MT" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pstFecRev}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="457" y="295" width="78" height="15" uuid="2e84a39d-7ccc-4d4d-817e-7162804de57f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tw Cen MT" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pstFecSat}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="457" y="312" width="78" height="15" uuid="29298fdd-4880-43f5-90ff-32ae39ab1bd2"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tw Cen MT" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pstFecDof}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="25" y="0" width="80" height="20" uuid="d8a6d434-bf03-4c51-bfde-0311f54ec179"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tw Cen MT" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RFC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="0" width="255" height="20" uuid="81bb20fd-ee2c-4a74-9c25-bdf833f3ffe8"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tw Cen MT" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proveedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="0" width="60" height="20" uuid="cedfdac7-7e9e-488e-b86a-9a3c9def05d8"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tw Cen MT" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Presunto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="0" width="60" height="20" uuid="c86f191a-54eb-41d8-941b-641ef5cbe9ad"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tw Cen MT" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Definitivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="0" width="60" height="20" uuid="c271ce90-8bac-4cfb-aa1c-3514ed36bba1"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tw Cen MT" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Incumplido]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="25" y="0" width="80" height="15" uuid="bf1c9b01-23b4-48e2-ba17-a15e3fc0ade7"/>
+				<textElement>
+					<font fontName="Tw Cen MT" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IND_RFC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="105" y="0" width="255" height="15" uuid="d6ef64ff-2ea8-42ec-bc36-2065be6185ec"/>
+				<textElement>
+					<font fontName="Tw Cen MT" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IND_COMPANY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="0" width="60" height="15" uuid="87df87ed-09c3-439f-a508-1da39463cb37"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tw Cen MT" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ALLEGED}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="420" y="0" width="60" height="15" uuid="a708783d-ebd5-494f-9e0b-5a21c8158d27"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tw Cen MT" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEFINITIVE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="480" y="0" width="60" height="15" uuid="4b46e1d4-858f-4f51-af61-7906bda6c1ea"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tw Cen MT" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{UNFULFILLED}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="16" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement x="25" y="2" width="455" height="20" uuid="6b457471-d024-4f0d-881d-84eac9598762"/>
+				<textElement>
+					<font fontName="Tw Cen MT"/>
+				</textElement>
+				<text><![CDATA[El presente documento únicamente tiene efectos informativos y no tiene ninguna validez oficial]]></text>
+			</staticText>
+			<image>
+				<reportElement x="25" y="22" width="527" height="37" uuid="e832b849-aa1a-4fc6-b23a-f52b3860dea5"/>
+				<imageExpression><![CDATA["images/footerOLS.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="480" y="2" width="30" height="20" uuid="c37cb01d-9c1e-4dc5-b6fb-1b933f345456"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tw Cen MT"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="510" y="2" width="10" height="20" uuid="7651d89a-4fe3-4760-a672-f9497112a8f8"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tw Cen MT"/>
+				</textElement>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="520" y="2" width="30" height="20" uuid="cbf65154-0b0f-4113-953b-6816e9710079"/>
+				<textElement>
+					<font fontName="Tw Cen MT"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="26" splitType="Stretch">
+			<line>
+				<reportElement x="25" y="5" width="515" height="1" uuid="706125b5-aa16-4885-a731-ba7d9b8b7d15"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

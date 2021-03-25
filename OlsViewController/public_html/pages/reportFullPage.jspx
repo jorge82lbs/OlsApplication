@@ -1,0 +1,897 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document title="Reporte Completo" id="d1"  smallIconSource="/images/web-icon16x16.png">
+            <af:messages id="m1"/>
+            <af:form id="f1">
+            <af:resource type="javascript">
+                    function enforcePreventUserInput(evt) {                    
+                        var popup = AdfPage.PAGE.findComponentByAbsoluteId('popLoading');
+                        if (popup != null) {
+                            AdfPage.PAGE.addBusyStateListener(popup, handleBusyState);
+                            evt.preventUserInput();
+                        }
+                    }
+                
+                    function handleBusyState(evt) {
+                        var popup = AdfPage.PAGE.findComponentByAbsoluteId('popLoading');
+                        if (popup != null) {
+                            if (evt.isBusy()) {
+                                popup.show();
+                            }
+                            else {
+                                popup.hide();
+                                AdfPage.PAGE.removeBusyStateListener(popup, handleBusyState);
+                            }
+                        }
+                    }        
+                </af:resource>
+                <af:pageTemplate viewId="/templates/olsTemplate.jspx" id="pt1">
+                    <f:facet name="content">
+                    <af:panelGroupLayout layout="scroll" id="PnlCont"
+                                             inlineStyle="border-style:none;">
+                            
+                            <af:separator id="sepTitle2"/>                           
+                                      <af:panelFormLayout id="PnlVars" rows="2" maxColumns="2"
+                                                          inlineStyle="width:430px;">
+                                      <af:inputDate label="Fecha De Recepción Del Listado Monitoreado: " id="id1"
+                                              binding="#{ReportFullBean.poDownFecRec}" autoSubmit="true">
+                                        <af:convertDateTime pattern="yyyy-MM-dd"/>
+                                      </af:inputDate>         
+                                      <af:inputDate label="Fecha De Revisión Y Monitoreo: " id="id2" autoSubmit="true"
+                                                  binding="#{ReportFullBean.poDownFecRev}"> 
+                                        <af:convertDateTime pattern="yyyy-MM-dd"/>
+                                      </af:inputDate>         
+                                      <af:inputDate label="Fecha De Publicación Del Listado En La Página Del SAT: " id="id3"
+                                                  binding="#{ReportFullBean.poDownFecSat}" autoSubmit="true">
+                                        <af:convertDateTime pattern="yyyy-MM-dd"/>
+                                      </af:inputDate>         
+                                      <af:inputDate label="Fecha De Publicación Del Listado En DOF: " id="id4"
+                                                  binding="#{ReportFullBean.poDownFecDof}" autoSubmit="true">
+                                        <af:convertDateTime pattern="yyyy-MM-dd"/>
+                                      </af:inputDate> 
+                                      </af:panelFormLayout>
+                            
+                            
+                            <af:separator id="sepTitle"/>
+                            <af:panelGroupLayout layout="horizontal" id="PnlParGenTbl" styleClass="AFStretchWidth"
+                                                 valign="top" halign="left" 
+                                                 inlineStyle="border-style:none; height:415px;">
+                            
+                            <af:panelSplitter id="PnlSplitMain" splitterPosition="302"
+                                      inlineStyle="width:1350px; "
+                                      collapsed="false"
+                                      firstBorder="skin">
+                                <f:facet name="first">
+                                    <af:panelGroupLayout layout="scroll"
+                                                         xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                                                         id="PnlGpAln">
+                                          <af:outputFormatted value="Buscar Parámetro" id="LblBscParGen"
+                                                            inlineStyle="color:Olive; font-weight:bold; 
+                                                            font-size:small; text-align:left;"/>
+                                        <af:separator id="sdedew"/>
+                                        <af:panelGroupLayout layout="horizontal" id="PnlUtil" halign="right"
+                                                            inlineStyle="border-style:none;">
+                                            <af:link text=" " id="BtnReset" 
+                                                    icon="/images/action_refresh_blue.gif" 
+                                                    partialSubmit="true"
+                                                    shortDesc="Reiniciar valores de búsqueda"
+                                                    actionListener="#{ReportFullBean.resetFilterValues}">
+                                            </af:link>
+                                            <af:spacer id="SpcAx" width="10" height="5"/>
+                                            
+                                            <af:link icon="/images/excel.gif"
+                                                               id="LnkExel"
+                                                               inlineStyle="text-align:center;"                                                   
+                                                               shortDesc="Exportar a Excel">
+                                                <af:exportCollectionActionListener exportedId="tblMain"
+                                                                           type="excelHTML"
+                                                                           filename="allPeriodosXLS.xls"/>
+                                            </af:link>
+                                            <af:spacer id="SpcAxTbl" width="10" height="5"/>
+                                            <af:link text=" " id="BtnResetTbl"
+                                                            icon="/images/restaurar.gif" 
+                                                            shortDesc="Reiniciar tabla"
+                                                     action="#{ReportFullBean.refreshMainTable}">
+                                            </af:link>
+                                        </af:panelGroupLayout>
+                                        <af:panelFormLayout id="PnlSearch" rows="14"
+                                                          maxColumns="1">
+                                            <af:inputText label="Rfc"                                                  
+                                                  id="TxtFilterRfc"
+                                                  partialTriggers="BtnReset"
+                                                  binding="#{ReportFullBean.poFilterRfc}"/>
+                                                  
+                                           <af:inputText label="Cliente"                                                  
+                                                  id="TxtFilterCliente"
+                                                  partialTriggers="BtnReset"
+                                                  binding="#{ReportFullBean.poFilterCliente}"/>
+                                                  
+                                            <af:selectBooleanCheckbox text="Limpios" label=""
+                                                                      id="sbc1"
+                                                                      partialTriggers="BtnReset sbc4 sbc3 sbc2"
+                                                                      binding="#{ReportFullBean.poFilterChkClean}"
+                                                                      valueChangeListener="#{ReportFullBean.selectCleanAction}"
+                                                                      autoSubmit="true"/>
+                                            <af:selectBooleanCheckbox text="Presuntos" label=""
+                                                                      id="sbc4"
+                                                                      valueChangeListener="#{ReportFullBean.setCleanChecBox3Action}"
+                                                                      partialTriggers="BtnReset sbc1"
+                                                                      autoSubmit="true"
+                                                                      binding="#{ReportFullBean.poFilterChkPre}"/>                                            
+                                            <af:selectBooleanCheckbox text="Definitivos" label=""
+                                                                      id="sbc3"
+                                                                      valueChangeListener="#{ReportFullBean.setCleanChecBox2Action}"
+                                                                      partialTriggers="BtnReset sbc1"
+                                                                      autoSubmit="true"
+                                                                      binding="#{ReportFullBean.poFilterChkDef}"/>
+                                            <af:selectBooleanCheckbox text="Inclumplidos" label=""
+                                                                      id="sbc2"
+                                                                      valueChangeListener="#{ReportFullBean.setCleanChecBoxAction}"
+                                                                      partialTriggers="BtnReset sbc1"
+                                                                      autoSubmit="true"
+                                                                      binding="#{ReportFullBean.poFilterChkInc}"/>
+                                        <af:spacer width="10" height="10" id="s33"/>
+                                        <af:button text="Buscar por Filtros"
+                                                  id="BtnSearch" 
+                                                  icon="/images/ver_orden.gif"
+                                                  shortDesc="Buscar Elementos"
+                                                  action="#{ReportFullBean.searchFilterAction}"/>
+                                        <af:spacer width="10" height="20" id="s3w3"/>
+                                      </af:panelFormLayout>
+                                      <af:panelGroupLayout layout="vertical" id="PnlUtilExRep" halign="center"
+                                                            inlineStyle="border-style:double ;">
+                                            <af:spacer id="SpcAxExRep1" width="10" height="15"/>
+                                            <af:button text="Generar Reportes Blacklist"
+                                                  id="BtnExeRepo" 
+                                                  icon="/images/icon_settings.gif"
+                                                  shortDesc="Generar Reportes Blacklist"
+                                                  action="#{ReportFullBean.createBlacklistAction}"/>
+                                            <af:spacer id="SpcAxExRep" width="10" height="15"/>
+                                      </af:panelGroupLayout>
+                                    </af:panelGroupLayout>
+                                  </f:facet>
+                                  <f:facet name="second">                                                                    
+                                  <af:panelGroupLayout id="pgl2" layout="vertical">
+                                   <af:inputText id="TxtRfc"
+                                                  label="IdRfc" columns="80"
+                                                  visible="false"
+                                                  partialTriggers="tblMain"
+                                                  binding="#{ReportFullBean.poRfcByTbl}">
+                                    </af:inputText>
+                                  <!-- ################################### TABLA PRINCIPAL ##################################################### !-->
+                                <af:table value="#{bindings.OlsSatClientsFullVwView1.collectionModel}" var="row"
+                                          rows="#{bindings.OlsSatClientsFullVwView1.rangeSize}"
+                                          emptyText="#{bindings.OlsSatClientsFullVwView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                          rowBandingInterval="0"
+                                          selectedRowKeys="#{bindings.OlsSatClientsFullVwView1.collectionModel.selectedRow}"
+                                          selectionListener="#{ReportFullBean.selectRowMainTable}"
+                                          rowSelection="single"
+                                          fetchSize="-1" 
+                                          styleClass="AFStretchWidth"
+                                      columnStretching="column:c7"
+                                      varStatus="vs" id="tblMain" autoHeightRows="19"
+                                      binding="#{ReportFullBean.poTblMain}">
+                                <af:column align="center" id="colCrudSweb"
+                                                frozen="true" sortable="false"
+                                                width="60">
+                                            <f:facet name="header">
+                                            <af:group id="g2">
+                                                <af:outputText value="Correo" id="ot154"/>
+                                            </af:group>
+                                            </f:facet>
+                                            <af:panelGroupLayout layout="horizontal"
+                                                                id="PnlOpc" valign="top"
+                                                                halign="left">
+                                                <af:link icon="/images/mnu_admon_not.gif"
+                                                         id="Lnksend"
+                                                         inlineStyle="text-align:center;"
+                                                         visible="#{(row.Alleged + row.Definitive + row.Unfulfilled) > 0}"
+                                                         action="#{ReportFullBean.sendMailAction}"
+                                                         shortDesc="Enviar Correo">
+                                                    <af:clientListener method="enforcePreventUserInput" type="action"/>                
+                                                </af:link>
+                                            </af:panelGroupLayout>
+                                        </af:column>
+                                        
+                                        <af:column align="center" id="colRepor"
+                                                frozen="true" sortable="false"
+                                                width="75">
+                                            <f:facet name="header">
+                                            <af:group id="g2r">
+                                                <af:outputText value="Reportes" id="ot154r"/>
+                                            </af:group>
+                                            </f:facet>
+                                            <af:panelGroupLayout layout="horizontal"
+                                                                id="PnlOpc4" valign="top"
+                                                                halign="left">
+                                                <af:link icon="/images/page_user_dark.gif"
+                                                         id="LnkRepEje"
+                                                         partialSubmit="true"
+                                                         inlineStyle="text-align:center;"
+                                                         shortDesc="Reporte">
+                                                    <af:fileDownloadActionListener method="#{ReportFullBean.reportAction}" />         
+                                                </af:link>
+                                                <af:spacer width="7" id="s8r911w" height="5"/>
+                                                <af:link icon="/images/table.gif" id="LnkDeRRr"
+                                                         inlineStyle="text-align:center;" 
+                                                         shortDesc="Reporte Detallado"
+                                                         >
+                                                    <af:fileDownloadActionListener method="#{ReportFullBean.reportDetailAction2}" />         
+                                                </af:link>
+                                                <!--action="#{ReportFullBean.downFileAction}"-->
+                                                <af:spacer width="5" id="spacer1" height="5"/>
+                                            </af:panelGroupLayout>
+                                        </af:column>
+                                        <af:column align="center" id="colvieweb"
+                                                frozen="true" sortable="false"
+                                                width="82" visible="false">
+                                            <f:facet name="header">
+                                            <af:group id="g2view">
+                                                <af:outputText value="Emails" id="ot154view"/>
+                                            </af:group>
+                                            </f:facet>
+                                            <af:panelGroupLayout layout="horizontal"
+                                                                id="PnlOpcview" valign="top"
+                                                                halign="left">
+                                                <af:link icon="/images/tables.gif"
+                                                         id="Lnkview"
+                                                         inlineStyle="text-align:center;"
+                                                         visible="true"
+                                                         actionListener="#{CustomsBean.showEmailsPopup}"
+                                                         shortDesc="Ver Direcciones de Correo">
+                                                </af:link>
+                                            </af:panelGroupLayout>
+                                        </af:column>
+                                        
+                                        <af:column align="center" id="colviepweb"
+                                                frozen="true" sortable="false"
+                                                width="75">
+                                            <f:facet name="header">
+                                            <af:group id="g2viewp">
+                                                <af:outputText value="Proveedores" id="ot154vpew"/>
+                                            </af:group>
+                                            </f:facet>
+                                            <af:panelGroupLayout layout="horizontal"
+                                                                id="PnlOpcvipew" valign="top"
+                                                                halign="left">
+                                                <af:link icon="/images/editar.gif"
+                                                         id="Lnkvipew"
+                                                         inlineStyle="text-align:center;"
+                                                         visible="true"
+                                                         actionListener="#{ReportFullBean.showProvidersFullPopup}"
+                                                         shortDesc="Ver Proveedores">
+                                                </af:link>
+                                            </af:panelGroupLayout>
+                                        </af:column>
+                                        
+                                        <af:column align="center" id="colviepweb2"
+                                                frozen="true" sortable="false"
+                                                width="85">
+                                            <f:facet name="header">
+                                            <af:group id="g2viewp2">
+                                                <af:outputText value="Prov/Incidencias" id="ot154vpew2"/>
+                                            </af:group>
+                                            </f:facet>
+                                            <af:panelGroupLayout layout="horizontal"
+                                                                id="PnlOpcvipew2" valign="top"
+                                                                halign="left">
+                                                <af:link icon="/images/icon_attachment.gif"
+                                                         id="Lnkvipew2"
+                                                         inlineStyle="text-align:center;"
+                                                         visible="true"
+                                                         clientComponent="true"
+                                                         actionListener="#{ReportFullBean.showProvidersPopup}"
+                                                         shortDesc="Proveedores Con Incidencias">
+                                                    <af:clientListener method="enforcePreventUserInput" type="action"/>  
+                                                </af:link>
+                                            </af:panelGroupLayout>
+                                        </af:column>
+                                        
+                                        
+                                            <af:column sortProperty="#{bindings.OlsSatClientsFullVwView1.hints.RowId1.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsSatClientsFullVwView1.hints.RowId1.label}"
+                                                       id="c1">
+                                                <af:outputText value="#{row.RowId1}"
+                                                               shortDesc="#{bindings.OlsSatClientsFullVwView1.hints.RowId1.tooltip}"
+                                                               id="ot1"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsSatClientsFullVwView1.hints.IdClientSat.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsSatClientsFullVwView1.hints.IdClientSat.label}"
+                                                       id="c2">
+                                                <af:outputText value="#{row.IdClientSat}"
+                                                               shortDesc="#{bindings.OlsSatClientsFullVwView1.hints.IdClientSat.tooltip}"
+                                                               id="ot2">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsSatClientsFullVwView1.hints.IdClientSat.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsSatClientsFullVwView1.hints.IndRfc.name}"
+                                                       sortable="true" align="center" width="120"
+                                                       headerText="RFC"
+                                                       id="c3">
+                                                <af:outputText value="#{row.IndRfc}"
+                                                               shortDesc="#{bindings.OlsSatClientsFullVwView1.hints.IndRfc.tooltip}"
+                                                               id="ot3"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsSatClientsFullVwView1.hints.IndCompany.name}"
+                                                       sortable="true" align="center" width="300"
+                                                       headerText="Nombre del Cliente"
+                                                       id="c4">
+                                                <af:outputText value="#{row.IndCompany}"
+                                                               shortDesc="#{bindings.OlsSatClientsFullVwView1.hints.IndCompany.tooltip}"
+                                                               id="ot4"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsSatClientsFullVwView1.hints.Alleged.name}"
+                                                       sortable="true" align="center" width="80"
+                                                       headerText="PRESUNTO"
+                                                       id="c5">
+                                                <af:link text="✔" id="BtnStop" 
+                                                     icon="/images/flag_orange.gif"
+                                                     visible="#{row.Alleged > 0}"
+                                                     partialSubmit="true"
+                                                     actionListener="#{ReportFullBean.showAllegedInfoAction}"
+                                                     shortDesc="Info Presunto" inlineStyle="color:White; text-align:center;">
+                                                </af:link>
+                                                <!--
+                                                <af:outputText value="#{row.Alleged}"
+                                                               shortDesc="#{bindings.OlsSatClientsFullVwView1.hints.Alleged.tooltip}"
+                                                               id="ot5">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsSatClientsFullVwView1.hints.Alleged.format}"/>
+                                                </af:outputText>
+                                                -->
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsSatClientsFullVwView1.hints.Definitive.name}"
+                                                       sortable="true" align="center" width="80"
+                                                       headerText="DEFINITIVO"
+                                                       id="c6">
+                                            <af:link text="✔" id="BtnStop2" 
+                                                     icon="/images/flag_red.gif"
+                                                     visible="#{row.Definitive > 0}"
+                                                     partialSubmit="true" inlineStyle="color:White; text-align:center;"
+                                                     actionListener="#{ReportFullBean.showDefinitiveInfoAction}"
+                                                     shortDesc="Info Definitivos">
+                                            </af:link>
+                                            <!--
+                                                <af:outputText value="#{row.Definitive}"
+                                                               shortDesc="#{bindings.OlsSatClientsFullVwView1.hints.Definitive.tooltip}"
+                                                               id="ot6">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsSatClientsFullVwView1.hints.Definitive.format}"/>
+                                                </af:outputText>
+                                                -->
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsSatClientsFullVwView1.hints.Unfulfilled.name}"
+                                                       sortable="true" align="center" width="90"
+                                                       headerText="No Localizados"
+                                                       id="c7">
+                                                 <af:link text="✔" id="BtnStop32" 
+                                                     icon="/images/flag_white.gif"
+                                                     visible="#{row.Unfulfilled > 0}"
+                                                     partialSubmit="true" inlineStyle="color:White; text-align:center;"
+                                                     actionListener="#{ReportFullBean.showIncumplidosInfoAction}"
+                                                     shortDesc="Info No Localizados">
+                                            </af:link><!---
+                                                <af:outputText value="#{row.Unfulfilled}"
+                                                               shortDesc="#{bindings.OlsSatClientsFullVwView1.hints.Unfulfilled.tooltip}"
+                                                               id="ot7">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsSatClientsFullVwView1.hints.Unfulfilled.format}"/>
+                                                </af:outputText>
+                                                -->
+                                            </af:column>
+                                        </af:table>
+                                  </af:panelGroupLayout>
+                                  </f:facet>
+                            </af:panelSplitter>
+                            </af:panelGroupLayout>
+                        </af:panelGroupLayout>                                        
+                    
+                    </f:facet>
+                </af:pageTemplate>
+                <!-- ################################### POPUP ENVIAR CORREO ############################################ !-->
+                <af:popup id="popupSendMail" contentDelivery="lazyUncached"
+                          binding="#{ReportFullBean.poPopupSendMail}">
+                    <af:panelWindow id="PnlUpdService" modal="true" closeIconVisible="false"
+                                    title="Enviar Correo" titleIconSource="/images/note_new.gif" 
+                                    styleClass="AFStretchWidth">
+                        <af:panelGroupLayout layout="vertical" id="PnlGrpUpdWs" valign="middle" halign="center" 
+                        styleClass="AFStretchWidth">
+                            <af:panelFormLayout id="PnlFrmUpdWs" rows="17" maxColumns="1" inlineStyle="width:400px;">                                 
+                                    <af:inputText label="idUser"                                                  
+                                                  visible="false"
+                                                  id="it9Upd"
+                                                  readOnly="true"
+                                                  binding="#{ReportFullBean.poSendIdClient}">
+                                    </af:inputText>                                    
+                                        <af:inputText id="TxtRFC" label="RFC"
+                                                      columns="20" readOnly="true"
+                                                      binding="#{ReportFullBean.poSendRfc}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtNomClient"
+                                                      label="Cliente" columns="20"
+                                                      readOnly="true"
+                                                      binding="#{ReportFullBean.poSendCompany}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtPresunto"
+                                                      label="Presunto" columns="20"
+                                                      readOnly="true" visible="false"
+                                                      binding="#{ReportFullBean.poSendPresunto}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtDefinitivo"
+                                                      label="Definitivo" columns="20"
+                                                      readOnly="true" visible="false"
+                                                      binding="#{ReportFullBean.poSendDefinitivo}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtIncumplido"
+                                                      label="No Localizado" columns="20"
+                                                      readOnly="true" visible="false"
+                                                      binding="#{ReportFullBean.poSendIncumplido}">
+                                        </af:inputText>
+                                <af:separator id="sepTitleEncEd"/>
+                                    
+                                <af:spacer width="10" height="10" id="SpUpdParameter02"/>
+                            </af:panelFormLayout>
+                            <af:panelGroupLayout id="PnlFrmBtnsPgUpd">
+                                <af:button text="Aceptar" id="BtnAceptUpdWs" icon="/images/aceptar.gif"
+                                            shortDesc="Enviar Ahora"
+                                            clientComponent="true"
+                                           action="#{ReportFullBean.sendMailAction}">
+                                    <af:clientListener method="enforcePreventUserInput" type="action"/>                
+                                </af:button>
+                                <af:spacer width="10" height="10" id="SpcUpd111"/>
+                                <af:button text="Cancelar" id="BtnCancelUpd" icon="/images/cancelar.gif" 
+                                shortDesc="Cierra el Popup." immediate="true"
+                                           action="#{ReportFullBean.cancelSendMailAction}"/>
+                            </af:panelGroupLayout>
+                        </af:panelGroupLayout>
+                    </af:panelWindow>
+                </af:popup>
+                <!-- ################################### POPUP LOADING .... ##################################### !-->
+                <af:popup id="popLoading" contentDelivery="immediate">
+                  <af:dialog id="dlgLoading" type="none" title="Procesando Información" closeIconVisible="false">
+                    <af:panelGroupLayout id="PnlLoading" layout="vertical" halign="center">
+                      <af:image source="/images/atom-logo.gif" id="ImgIdxLoad" shortDesc="Cargando..."/>
+                      <af:outputText value="... por favor espere." id="LblIdxLoad1Login"/>
+                    </af:panelGroupLayout>
+                  </af:dialog>
+                </af:popup>
+                
+                <!-- ################################### POPUP PROVIDERS .... ##################################### !-->
+                 <af:popup id="popShowProv" contentDelivery="lazyUncached" binding="#{ReportFullBean.poPopupProv}">
+                  <af:panelWindow id="PnlShowAgencia" inlineStyle="border-style:none; width:78em; height:35em;" modal="false" clientComponent="true" closeIconVisible="true" title="Provedores" titleIconSource="/images/page_component.gif" >
+                    <af:panelGroupLayout layout="vertical" id="PnlShowMsg" styleClass="AFStretchWidth" inlineStyle="border-style:none; height:30.0em;" valign="middle" halign="left">
+                    <af:separator id="sepProv01"/>
+                    <af:panelGroupLayout layout="horizontal" id="PnlShowMsgHt" styleClass="AFStretchWidth" valign="middle" halign= "end">
+                        <af:link icon="/images/excel.gif" text="Exportar Proveedores a Excel"
+                                           id="LnkExelPr"
+                                           inlineStyle="text-align:center;"                                                   
+                                           shortDesc="Exportar a Excel">
+                            <af:exportCollectionActionListener exportedId="t1"
+                                                       type="excelHTML"  
+                                                       filename="ProveedoresXLS.xls"/>
+                        </af:link>
+                    </af:panelGroupLayout>
+                    <af:separator id="sepProv02"/>
+                    <af:panelGroupLayout layout="vertical" id="PnlData" inlineStyle="border-style:none;" valign="middle" halign="left">
+                        <af:inputText id="TxtRFCPro" label=" "
+                                      columns="20" readOnly="true"
+                                      binding="#{ReportFullBean.poRfcProv}" inlineStyle="font-weight:bold;">
+                        </af:inputText>
+                        <af:inputText id="TxtCtePro" label=" "
+                                      columns="150" readOnly="true"
+                                      binding="#{ReportFullBean.poCteProv}" inlineStyle="font-weight:bold;">
+                        </af:inputText>
+                    </af:panelGroupLayout>
+                    <af:spacer id="SpcAx3" width="10" height="5"/>
+                      <!--################ TABLA DE PROVEEDORES ############################ -->
+                        <af:table value="#{bindings.OlsSatProvidersFullVwView1.collectionModel}" var="row"
+                                  rows="#{bindings.OlsSatProvidersFullVwView1.rangeSize}"
+                                  emptyText="#{bindings.OlsSatProvidersFullVwView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                  rowBandingInterval="0"
+                                  selectedRowKeys="#{bindings.OlsSatProvidersFullVwView1.collectionModel.selectedRow}"
+                                  selectionListener="#{bindings.OlsSatProvidersFullVwView1.collectionModel.makeCurrent}"
+                                  rowSelection="single" fetchSize="#{bindings.OlsSatProvidersFullVwView1.rangeSize}"
+                                  styleClass="AFStretchWidth"
+                                  columnStretching="column:c16"
+                                  autoHeightRows="10"
+                                  binding="#{ReportFullBean.poTblProv}"
+                                  id="t1">
+                            <af:column sortProperty="#{bindings.OlsSatProvidersFullVwView1.hints.RowId1.name}"
+                                       sortable="true" visible="false"
+                                       headerText="#{bindings.OlsSatProvidersFullVwView1.hints.RowId1.label}"
+                                       id="c8">
+                                <af:outputText value="#{row.RowId1}"
+                                               shortDesc="#{bindings.OlsSatProvidersFullVwView1.hints.RowId1.tooltip}"
+                                               id="ot5"/>
+                            </af:column>
+                            <af:column sortProperty="#{bindings.OlsSatProvidersFullVwView1.hints.IdProvider.name}"
+                                       sortable="true" visible="false"
+                                       headerText="#{bindings.OlsSatProvidersFullVwView1.hints.IdProvider.label}"
+                                       id="c9">
+                                <af:outputText value="#{row.IdProvider}"
+                                               shortDesc="#{bindings.OlsSatProvidersFullVwView1.hints.IdProvider.tooltip}"
+                                               id="ot6">
+                                    <af:convertNumber groupingUsed="false"
+                                                      pattern="#{bindings.OlsSatProvidersFullVwView1.hints.IdProvider.format}"/>
+                                </af:outputText>
+                            </af:column>
+                            <af:column sortProperty="#{bindings.OlsSatProvidersFullVwView1.hints.IdClientSat.name}"
+                                       sortable="true" visible="false"
+                                       headerText="#{bindings.OlsSatProvidersFullVwView1.hints.IdClientSat.label}"
+                                       id="c10">
+                                <af:outputText value="#{row.IdClientSat}"
+                                               shortDesc="#{bindings.OlsSatProvidersFullVwView1.hints.IdClientSat.tooltip}"
+                                               id="ot7">
+                                    <af:convertNumber groupingUsed="false"
+                                                      pattern="#{bindings.OlsSatProvidersFullVwView1.hints.IdClientSat.format}"/>
+                                </af:outputText>
+                            </af:column>
+                            <af:column sortProperty="#{bindings.OlsSatProvidersFullVwView1.hints.IndRfcClient.name}"
+                                       sortable="true" align="center" visible="false"
+                                       headerText="Cliente"
+                                       id="c11">
+                                <af:outputText value="#{row.IndRfcClient}"
+                                               shortDesc="#{bindings.OlsSatProvidersFullVwView1.hints.IndRfcClient.tooltip}"
+                                               id="ot8"/>
+                            </af:column>
+                            <af:column sortProperty="#{bindings.OlsSatProvidersFullVwView1.hints.IndRfc.name}"
+                                       sortable="true" align="center" width="150"
+                                       headerText="RFC"
+                                       id="c12">
+                                <af:outputText value="#{row.IndRfc}"
+                                               shortDesc="#{bindings.OlsSatProvidersFullVwView1.hints.IndRfc.tooltip}"
+                                               id="ot9"/>
+                            </af:column>
+                            <af:column sortProperty="#{bindings.OlsSatProvidersFullVwView1.hints.IndCompany.name}"
+                                       sortable="true" align="center" width="280"
+                                       headerText="Proveedor"
+                                       id="c13">
+                                <af:outputText value="#{row.IndCompany}"
+                                               shortDesc="#{bindings.OlsSatProvidersFullVwView1.hints.IndCompany.tooltip}"
+                                               id="ot10"/>
+                            </af:column>
+                            <af:column sortProperty="#{bindings.OlsSatProvidersFullVwView1.hints.Alleged.name}"
+                                       sortable="true" align="center" width="100"
+                                       headerText="Presunto"
+                                       id="c14">
+                                       
+                                <af:link text="✔" id="BtnStop2p" 
+                                         icon="/images/flag_blue.gif"
+                                         visible="#{row.Alleged > 0}"
+                                          inlineStyle="color:White; text-align:center;"
+                                         shortDesc="Alleged">
+                                </af:link>
+                                        
+                                   <!--     
+                                <af:outputText value="#{row.Alleged}"
+                                               shortDesc="#{bindings.OlsSatProvidersFullVwView1.hints.Alleged.tooltip}"
+                                               id="ot11">                                        
+                                </af:outputText>-->
+                            </af:column>
+                            <af:column sortProperty="#{bindings.OlsSatProvidersFullVwView1.hints.Definitive.name}"
+                                       sortable="true" align="center" width="100"
+                                       headerText="Definitivo"
+                                       id="c15">
+                                 <af:link text="✔" id="BtnStop2ps" 
+                                         icon="/images/flag_orange.gif"
+                                         visible="#{row.Definitive > 0}"
+                                          inlineStyle="color:White; text-align:center;"
+                                         shortDesc="Definitive">
+                                </af:link><!--
+                                <af:outputText value="#{row.Definitive}"
+                                               shortDesc="#{bindings.OlsSatProvidersFullVwView1.hints.Definitive.tooltip}"
+                                               id="ot12">                                        
+                                </af:outputText>-->
+                            </af:column>
+                            <af:column sortProperty="#{bindings.OlsSatProvidersFullVwView1.hints.Unfulfilled.name}"
+                                       sortable="true" align="center" width="100"
+                                       headerText="No Loc"
+                                       id="c16">
+                                <af:link text="✔" id="BtnStop2pa" 
+                                         icon="/images/flag_red.gif"
+                                         visible="#{row.Unfulfilled > 0}"
+                                          inlineStyle="color:White; text-align:center;"
+                                         shortDesc="Unfulfilled">
+                                </af:link>
+                                <!--
+                                <af:outputText value="#{row.Unfulfilled}"
+                                               shortDesc="#{bindings.OlsSatProvidersFullVwView1.hints.Unfulfilled.tooltip}"
+                                               id="ot13">
+                                </af:outputText>-->
+                            </af:column>
+                        </af:table>
+                    <af:spacer id="SpcAxe33" width="10" height="5"/>
+                    <af:button text="Cancelar" id="BtnCancelUpdRep" icon="/images/cancelar.gif" 
+                                shortDesc="Cierra el Popup." immediate="true"
+                                action="#{ReportFullBean.cancelFullReportAction}"/>
+                    </af:panelGroupLayout>
+                    
+                  </af:panelWindow>
+                </af:popup>
+                
+                <!-- ################################### CONFIRMAR DESCARGAR ARCHIVO ############################################ !-->
+                <af:popup id="popupDownFile" contentDelivery="lazyUncached"
+                          binding="#{ReportFullBean.poPopupDownFile}">
+                    <af:panelWindow id="PnlDown" modal="true" closeIconVisible="false" 
+                                    title="Descargar Archivo " titleIconSource="/images/icon_download.gif" 
+                                    styleClass="AFStretchWidth" binding="#{ReportFullBean.poDownPnlWin}">
+                        <af:panelGroupLayout layout="vertical" id="PnlGrpDown" valign="middle" halign="center" 
+                        styleClass="AFStretchWidth">
+                            <af:panelFormLayout id="PnlFrmUDowns" rows="17" maxColumns="1" styleClass="AFStretchWidth"> 
+                                <af:inputText label="TypeReport"                                                  
+                                                  visible="false"
+                                                  id="ittype"
+                                                  readOnly="true"
+                                                  binding="#{ReportFullBean.poDownType}"/>
+                                    <af:inputText label="idUser"                                                  
+                                                  visible="false"
+                                                  id="it9Updd"
+                                                  readOnly="true"
+                                                  binding="#{ReportFullBean.poDownIdClient}">
+                                    </af:inputText>                                    
+                                        <af:inputText id="TxtRFCd" label="RFC: "
+                                                      columns="20" readOnly="true"
+                                                      binding="#{ReportFullBean.poDownRfc}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtNomClientd"
+                                                      label="Cliente: " columns="20"
+                                                      readOnly="true"
+                                                      binding="#{ReportFullBean.poDownCompany}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtNomNumtd"
+                                                      label="Proveedores: " columns="20"
+                                                      readOnly="true"
+                                                      binding="#{ReportFullBean.poDownNumProvs}">
+                                        </af:inputText>
+                                
+                                <af:separator id="sepTitleEncEdd"/>
+                                <af:spacer width="10" height="10" id="SpUpdPer02"/>
+                            </af:panelFormLayout>
+                            <af:panelGroupLayout id="PnlFrmBtnsPgUpds">
+                                <af:button text="Aceptar" id="BtnAceptUpdWsd" icon="/images/aceptar.gif"
+                                           shortDesc="Descargar"
+                                           >                                    
+                                    <af:fileDownloadActionListener method="#{ReportFullBean.reportDetailAction}"/>
+                                </af:button>
+                                <af:spacer width="10" height="10" id="SpcUpd111d"/>
+                                <af:button text="Cancelar" id="BtnCancelUpdd" icon="/images/cancelar.gif" 
+                                shortDesc="Cierra el Popup." immediate="true"
+                                           action="#{ReportFullBean.cancelDownFileAction}"/>
+                            </af:panelGroupLayout>
+                        </af:panelGroupLayout>
+                    </af:panelWindow>
+                </af:popup>
+                
+                <!-- ################################### POPUP COMPLEMENT INFO PRESUNTOS ##################################### !-->
+                 <af:popup id="popShowCom" contentDelivery="lazyUncached" binding="#{ReportFullBean.poPopupProvInfo}">
+                  <af:panelWindow id="PnlShowCom" inlineStyle="border-style:none; width:60em; height:20em;" modal="false" clientComponent="true" closeIconVisible="true" title="Info PRESUNTOS" titleIconSource="/images/page_component.gif" >
+                    <af:panelGroupLayout layout="vertical" id="PnlShowMsgCom" styleClass="AFStretchWidth" inlineStyle="border-style:none; height:30.0em;" valign="middle" halign="left">
+                    <af:panelGroupLayout layout="vertical" id="PnlDataCom" inlineStyle="border-style:none;" valign="middle" halign="left">
+                        <af:inputText id="TxtRFCCom" label=" "
+                                      columns="20" readOnly="true"
+                                      binding="#{ReportFullBean.poRfcCom}" inlineStyle="font-weight:bold;">
+                        </af:inputText>
+                        <af:inputText id="TxtCteCom" label=" "
+                                      columns="150" readOnly="true"
+                                      binding="#{ReportFullBean.poCteCom}" inlineStyle="font-weight:bold;">
+                        </af:inputText>
+                    </af:panelGroupLayout>
+                    <af:spacer id="SpcAx3Com" width="5" height="5"/>
+                    <af:separator id="sepHdrPre"/>   
+                      <!--################ Registros complementarios ############################ -->
+                       <af:panelGroupLayout layout="scroll" id="PnlGrpIter" valign="middle" halign="left">
+                       <af:iterator id="i1" var="row" varStatus="rowStatus"
+                                         binding="#{ReportFullBean.poPresuntosIterator}"
+                                    value="#{ReportFullBean.listAllegedInfo}">
+                            
+                            <af:panelGroupLayout id="PnlIterador" layout="vertical" clientComponent="true" halign="center">
+
+                               <af:panelGroupLayout id="PnlItem0" layout="horizontal" halign="left">                                
+                                <af:inputText label="Situación del Contribuyente: " 
+                                              value="#{row.lsIndSituation}"
+                                              id="Txt00" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                              
+                              <af:panelGroupLayout id="PnlItem1" layout="horizontal" halign="left">                                
+                                <af:inputText label="Número Y Fecha De Oficio Global De Presunción: " 
+                                              value="#{row.lsIndTradeNumber}"
+                                              id="Txt01" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                           
+                              <af:panelGroupLayout id="PnlItem2" layout="horizontal" halign="left">
+                              <af:inputText label="Publicación Página SAT Presuntos: " 
+                                              value="#{row.lsFecPublicationSat}" 
+                                              id="Txt02" readOnly="true"
+                                inlineStyle="font-weight:bold;"/>                                
+                              </af:panelGroupLayout>
+                              
+                              <af:panelGroupLayout id="PnlItem3" layout="horizontal" halign="left">
+                              <af:inputText label="Número Y Fecha De Oficio Global De Presunción: " 
+                                              value="#{row.lsIndTradeNumber2}" 
+                                              id="Txt03" readOnly="true"
+                                inlineStyle="font-weight:bold;"/>                                
+                              </af:panelGroupLayout>
+                              
+                              <af:panelGroupLayout id="PnlItem4" layout="horizontal" halign="left">
+                              <af:inputText label="Publicación DOF: " 
+                                              value="#{row.ltFecPublicationDof}" 
+                                              id="Txt04" readOnly="true"
+                                inlineStyle="font-weight:bold;"/>                                
+                              </af:panelGroupLayout>
+                              
+                            </af:panelGroupLayout>
+                            <af:separator id="sepFootPre"/>   
+                        </af:iterator>
+                       </af:panelGroupLayout>
+                    </af:panelGroupLayout>
+                  </af:panelWindow>
+                </af:popup>
+                
+                <!-- ################################### POPUP COMPLEMENT INFO DEFINITIVOS ##################################### !-->
+                 <af:popup id="popShowDef" contentDelivery="lazyUncached" binding="#{ReportFullBean.poPopupDefInfo}">
+                  <af:panelWindow id="PnlShowDef" inlineStyle="border-style:none; width:60em; height:20em;" modal="false" clientComponent="true" closeIconVisible="true" title="Info DEFINITIVOS" titleIconSource="/images/page_component.gif" >
+                    <af:panelGroupLayout layout="vertical" id="PnlShowMsgDef" styleClass="AFStretchWidth" inlineStyle="border-style:none; height:30.0em;" valign="middle" halign="left">
+                    <af:panelGroupLayout layout="vertical" id="PnlDataDef" inlineStyle="border-style:none;" valign="middle" halign="left">
+                        <af:inputText id="TxtRFCDef" label=" "
+                                      columns="20" readOnly="true"
+                                      binding="#{ReportFullBean.poRfcDef}" inlineStyle="font-weight:bold;">
+                        </af:inputText>
+                        <af:inputText id="TxtCteDef" label=" "
+                                      columns="150" readOnly="true"
+                                      binding="#{ReportFullBean.poCteDef}" inlineStyle="font-weight:bold;">
+                        </af:inputText>
+                    </af:panelGroupLayout>
+                    <af:spacer id="SpcAx3Def" width="5" height="5"/>
+                    <af:separator id="sepHdrDef"/>   
+                      <!--################ Registros complementarios ############################ -->
+                       <af:panelGroupLayout layout="scroll" id="PnlGrpIterDef" valign="middle" halign="left">
+                       <af:iterator id="i1Def" var="row" varStatus="rowStatus"
+                                         binding="#{ReportFullBean.poDefIterator}"
+                                    value="#{ReportFullBean.listDefinitiveInfo}">
+                            
+                            <af:panelGroupLayout id="PnlIterDef" layout="vertical" clientComponent="true" halign="center">
+
+                               <af:panelGroupLayout id="PnlItemDef0" layout="horizontal" halign="left">                                
+                                <af:inputText label="Situación del Contribuyente: " 
+                                              value="#{row.lsIndSituation}"
+                                              id="TxtDef00" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                              
+                              <af:panelGroupLayout id="PnlItemDef1" layout="horizontal" halign="left">                                
+                                <af:inputText label="Número Y Fecha De Oficio Global De Presunción: " 
+                                              value="#{row.lsIndTradeNumber}"
+                                              id="TxtDef01" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                              
+                              <af:panelGroupLayout id="PnlItemDef2" layout="horizontal" halign="left">                                
+                                <af:inputText label="Publicación Página Sat Presuntos: " 
+                                              value="#{row.lsFecPublication}"
+                                              id="TxtDef02" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                              
+                              <af:panelGroupLayout id="PnlItemDef3" layout="horizontal" halign="left">                                
+                                <af:inputText label="Número Y Fecha De Oficio Global De Presunción: " 
+                                              value="#{row.lsIndTradeNumber2}"
+                                              id="TxtDef03" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                              
+                              <af:panelGroupLayout id="PnlItemDef4" layout="horizontal" halign="left">                                
+                                <af:inputText label="Publicación Dof Presuntos: " 
+                                              value="#{row.ltFecPublicationDof}"
+                                              id="TxtDef04" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                              
+                              <af:panelGroupLayout id="PnlItemDef5" layout="horizontal" halign="left">                                
+                                <af:inputText label="Número Y Fecha De Oficio Global De Definitivos: " 
+                                              value="#{row.lsIndTradeDfn}"
+                                              id="TxtDef05" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                              
+                              <af:panelGroupLayout id="PnlItemDef6" layout="horizontal" halign="left">                                
+                                <af:inputText label="Publicación Página Sat Definitivos: " 
+                                              value="#{row.ltFecPublicationSat}"
+                                              id="TxtDef06" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                              
+                              <af:panelGroupLayout id="PnlItemDef7" layout="horizontal" halign="left">                                
+                                <af:inputText label="Publicación Dof Definitivos: " 
+                                              value="#{row.ltFecPubDofDfn}"
+                                              id="TxtDef07" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                              
+                            </af:panelGroupLayout>
+                            <af:separator id="sepFootDef"/>   
+                        </af:iterator>
+                       </af:panelGroupLayout>
+                    </af:panelGroupLayout>
+                  </af:panelWindow>
+                </af:popup>
+                
+                <!-- ################################### POPUP COMPLEMENT INFO INCUMPLIDOS ##################################### !-->
+                 <af:popup id="popShowInc" contentDelivery="lazyUncached" binding="#{ReportFullBean.poPopupIncInfo}">
+                  <af:panelWindow id="PnlShowInc" inlineStyle="border-style:none; width:60em; height:20em;" modal="false" clientComponent="true" closeIconVisible="true" title="Info No Localizados" titleIconSource="/images/page_component.gif" >
+                    <af:panelGroupLayout layout="vertical" id="PnlShowMsgInc" styleClass="AFStretchWidth" inlineStyle="border-style:none; height:30.0em;" valign="middle" halign="left">
+                    <af:panelGroupLayout layout="vertical" id="PnlDataInc" inlineStyle="border-style:none;" valign="middle" halign="left">
+                        <af:inputText id="TxtRFCInc" label=" "
+                                      columns="20" readOnly="true"
+                                      binding="#{ReportFullBean.poRfcInc}" inlineStyle="font-weight:bold;">
+                        </af:inputText>
+                        <af:inputText id="TxtCteInc" label=" "
+                                      columns="150" readOnly="true"
+                                      binding="#{ReportFullBean.poCteInc}" inlineStyle="font-weight:bold;">
+                        </af:inputText>
+                    </af:panelGroupLayout>
+                    <af:spacer id="SpcAx3Inc" width="5" height="5"/>
+                    <af:separator id="sepHdrInc"/>   
+                      <!--################ Registros complementarios ############################ -->
+                       <af:panelGroupLayout layout="scroll" id="PnlGrpIterInc" valign="middle" halign="left">
+                       <af:iterator id="i1Inc" var="row" varStatus="rowStatus"
+                                         binding="#{ReportFullBean.poIncIterator}"
+                                    value="#{ReportFullBean.listIncumplidosInfo}">
+                            
+                            <af:panelGroupLayout id="PnlIterInc" layout="vertical" clientComponent="true" halign="center">
+
+                               <af:panelGroupLayout id="PnlItemInc0" layout="horizontal" halign="left">                                
+                                <af:inputText label="Tipo De Persona: " 
+                                              value="#{row.lsIndTypePerson}"
+                                              id="TxtInc00" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                              
+                             <af:panelGroupLayout id="PnlItemInc1" layout="horizontal" halign="left">                                
+                                <af:inputText label="Supuesto De Publicación: " 
+                                              value="#{row.lsIndSupposed}"
+                                              id="TxtInc01" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                              
+                              <af:panelGroupLayout id="PnlItemInc2" layout="horizontal" halign="left">                                
+                                <af:inputText label="Fecha De Primera Publicación: " 
+                                              value="#{row.ltFecPublication}"
+                                              id="TxtInc02" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                              
+                              <af:panelGroupLayout id="PnlItemInc3" layout="horizontal" halign="left">                                
+                                <af:inputText label="Monto: " 
+                                              value="#{row.ldNumAmount}"
+                                              id="TxtInc03" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                              
+                              <af:panelGroupLayout id="PnlItemInc4" layout="horizontal" halign="left">                                
+                                <af:inputText label="Fecha De Publicación(Con Monto De Acuerdo A La Ley De Transparencia): " 
+                                              value="#{row.ltFecPublicationLaw}"
+                                              id="TxtInc04" readOnly="true"
+                                />
+                              </af:panelGroupLayout>
+                            
+                            </af:panelGroupLayout>
+                            <af:separator id="sepFootInc"/>   
+                        </af:iterator>
+                       </af:panelGroupLayout>
+                    </af:panelGroupLayout>
+                  </af:panelWindow>
+                </af:popup>
+                
+                
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>

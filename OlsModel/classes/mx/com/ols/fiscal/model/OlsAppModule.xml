@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE AppModule SYSTEM "jbo_03_01.dtd">
+<!---->
+<AppModule
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="OlsAppModule"
+  Version="12.1.3.10.47"
+  InheritPersonalization="merge"
+  ClearCacheOnRollback="true">
+  <ViewUsage
+    Name="OlsCatConfigParamTabView1"
+    ViewObjectName="mx.com.ols.fiscal.model.OlsCatConfigParamTabView"/>
+  <ViewUsage
+    Name="OlsCatFiscalLawFirmTabView1"
+    ViewObjectName="mx.com.ols.fiscal.model.OlsCatFiscalLawFirmTabView"/>
+  <ViewUsage
+    Name="OlsCatSatClientsOlsTabView1"
+    ViewObjectName="mx.com.ols.fiscal.model.OlsCatSatClientsOlsTabView"/>
+  <ViewUsage
+    Name="OlsCatUsersTabView1"
+    ViewObjectName="mx.com.ols.fiscal.model.OlsCatUsersTabView"/>
+  <ViewUsage
+    Name="OlsTrxSatUploadErrTabView1"
+    ViewObjectName="mx.com.ols.fiscal.model.OlsTrxSatUploadErrTabView"/>
+  <ViewUsage
+    Name="OlsSatClientsFullVwView1"
+    ViewObjectName="mx.com.ols.fiscal.model.vo.OlsSatClientsFullVwView"/>
+  <ViewUsage
+    Name="OlsSatClientsByPeriodVw1"
+    ViewObjectName="mx.com.ols.fiscal.model.vo.OlsSatClientsByPeriodVw"/>
+  <ViewUsage
+    Name="OlsSatProvidersFullVwView1"
+    ViewObjectName="mx.com.ols.fiscal.model.vo.OlsSatProvidersFullVwView"/>
+  <ViewUsage
+    Name="OlsCatSatMailsCtesTabView1"
+    ViewObjectName="mx.com.ols.fiscal.model.OlsCatSatMailsCtesTabView"/>
+  <ViewUsage
+    Name="OlsCatSatUnfulfilledTabView1"
+    ViewObjectName="mx.com.ols.fiscal.model.OlsCatSatUnfulfilledTabView"/>
+  <ViewUsage
+    Name="OlsCatSatProvidersOlsTabView1"
+    ViewObjectName="mx.com.ols.fiscal.model.OlsCatSatProvidersOlsTabView"/>
+</AppModule>

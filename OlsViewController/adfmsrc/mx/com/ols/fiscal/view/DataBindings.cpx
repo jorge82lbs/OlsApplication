@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Application xmlns="http://xmlns.oracle.com/adfm/application" version="12.1.3.10.8" id="DataBindings"
+             SeparateXMLFiles="false" Package="mx.com.ols.fiscal.view" ClientType="Generic">
+  <pageMap>
+    <page path="/pages/parametersPage.jspx" usageId="mx_com_ols_fiscal_view_parametersPagePageDef"/>
+    <page path="/pages/usersPage.jspx" usageId="mx_com_ols_fiscal_view_usersPagePageDef"/>
+    <page path="/pages/customsPage.jspx" usageId="mx_com_ols_fiscal_view_customsPagePageDef"/>
+    <page path="/pages/incidentsPage.jspx" usageId="mx_com_ols_fiscal_view_incidentsPagePageDef"/>
+    <page path="/pages/reportFullPage.jspx" usageId="mx_com_ols_fiscal_view_reportFullPagePageDef"/>
+    <page path="/pages/reportPeriodPage.jspx" usageId="mx_com_ols_fiscal_view_reportPeriodPagePageDef"/>
+    <page path="/pages/uploadPage.jspx" usageId="mx_com_ols_fiscal_view_uploadPagePageDef"/>
+  </pageMap>
+  <pageDefinitionUsages>
+    <page id="mx_com_ols_fiscal_view_parametersPagePageDef" path="pages.parametersPagePageDef"/>
+    <page id="mx_com_ols_fiscal_view_usersPagePageDef" path="pages.usersPagePageDef"/>
+    <page id="mx_com_ols_fiscal_view_customsPagePageDef" path="pages.customsPagePageDef"/>
+    <page id="mx_com_ols_fiscal_view_incidentsPagePageDef" path="pages.incidentsPagePageDef"/>
+    <page id="mx_com_ols_fiscal_view_reportFullPagePageDef" path="pages.reportFullPagePageDef"/>
+    <page id="mx_com_ols_fiscal_view_reportPeriodPagePageDef" path="pages.reportPeriodPagePageDef"/>
+    <page id="mx_com_ols_fiscal_view_uploadPagePageDef" path="pages.uploadPagePageDef"/>
+  </pageDefinitionUsages>
+  <dataControlUsages>
+    <BC4JDataControl id="OlsAppModuleDataControl" Package="mx.com.ols.fiscal.model"
+                     FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true"
+                     SupportsFindMode="true" SupportsRangesize="true" SupportsResetState="true"
+                     SupportsSortCollection="true" Configuration="OlsAppModuleLocal" syncMode="Immediate"
+                     xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+  </dataControlUsages>
+</Application>

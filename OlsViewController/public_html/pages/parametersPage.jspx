@@ -1,0 +1,556 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document title="Configuración de Parámetros" id="d1" smallIconSource="/images/web-icon16x16.png">
+            <af:messages id="m1"/>
+            <af:form id="f1">
+            <af:resource type="javascript">
+                    function enforcePreventUserInput(evt) {                    
+                        var popup = AdfPage.PAGE.findComponentByAbsoluteId('p1oadLogin');
+                        if (popup != null) {
+                            AdfPage.PAGE.addBusyStateListener(popup, handleBusyState);
+                            evt.preventUserInput();
+                        }
+                    }
+                
+                    function handleBusyState(evt) {
+                        var popup = AdfPage.PAGE.findComponentByAbsoluteId('p1oadLogin');
+                        if (popup != null) {
+                            if (evt.isBusy()) {
+                                popup.show();
+                            }
+                            else {
+                                popup.hide();
+                                AdfPage.PAGE.removeBusyStateListener(popup, handleBusyState);
+                            }
+                        }
+                    }        
+                </af:resource>
+                <af:pageTemplate viewId="/templates/olsTemplate.jspx" id="pt1">
+                    <f:facet name="content">
+                    <af:panelGroupLayout layout="scroll" id="PnlCont"
+                                             inlineStyle="border-style:none;">
+                            <af:panelHeader text="Configuración de Parámetros Generales" id="PnlHead"
+                                type="default"
+                                messageType="none"
+                                shortDesc="Configuración de Parámetros Generales"
+                                inlineStyle="border-style:none;">
+                            <f:facet name="toolbar">
+                                <af:statusIndicator id="StiIndicator" shortDesc="Status Indicator"/>
+                            </f:facet>
+                            </af:panelHeader>
+                            <af:separator id="sepTitle"/>
+                            <af:panelGroupLayout layout="horizontal" id="PnlParGenTbl" styleClass="AFStretchWidth"
+                                                 valign="top" halign="left" 
+                                                 inlineStyle="border-style:none; height:415px;">
+                            <af:panelSplitter id="PnlSplitMain" splitterPosition="302"
+                                      inlineStyle="width:1350px; "
+                                      collapsed="false"
+                                      firstBorder="skin">
+                                <f:facet name="first">
+                                    <af:panelGroupLayout layout="scroll"
+                                                         xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                                                         id="PnlGpAln">
+                                          <af:outputFormatted value="Buscar Parámetro" id="LblBscParGen"
+                                                            inlineStyle="color:Olive; font-weight:bold; 
+                                                            font-size:small; text-align:left;"/>
+                                        <af:separator id="sdedew"/>
+                                        <af:panelGroupLayout layout="horizontal" id="PnlUtil" halign="right"
+                                                            inlineStyle="border-style:none;">
+                                            <af:link text=" " id="BtnReset" 
+                                                    icon="/images/action_refresh_blue.gif" 
+                                                    partialSubmit="true"
+                                                    shortDesc="Reiniciar valores de búsqueda"
+                                                    actionListener="#{ParametersBean.resetFilterValues}">
+                                            </af:link>
+                                            <af:spacer id="SpcAx" width="10" height="5"/>
+                                            
+                                            <af:link icon="/images/excel.gif"
+                                                               id="LnkExel"
+                                                               inlineStyle="text-align:center;"                                                   
+                                                               shortDesc="Exportar a Excel">
+                                                <af:exportCollectionActionListener exportedId="tblCgr"
+                                                                           type="excelHTML"
+                                                                           filename="parametersXLS.xls"/>
+                                            </af:link>
+                                            <af:spacer id="SpcAxTbl" width="10" height="5"/>
+                                            <af:link text=" " id="BtnResetTbl"
+                                                            icon="/images/restaurar.gif" 
+                                                            shortDesc="Reiniciar tabla"
+                                                     action="#{ParametersBean.refreshMainTable}">
+                                            </af:link>
+                                        </af:panelGroupLayout>
+                                        <af:panelFormLayout id="PnlSearch" rows="14"
+                                                          maxColumns="1">
+                                        <af:inputText id="TxtFilterParameter"
+                                                      label="Parámetros" columns="20"
+                                                      partialTriggers="BtnReset"
+                                                      binding="#{ParametersBean.poFilterParameter}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtFilterDescParameter" label="Descripción"
+                                                      columns="20" 
+                                                      partialTriggers="BtnReset" 
+                                                      binding="#{ParametersBean.poFilterDescParameter}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtFilterUsedBy" label="Usado En"
+                                                      columns="20" 
+                                                      partialTriggers="BtnReset" 
+                                                      binding="#{ParametersBean.poFilterUsedBy}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtFilterValue" label="Valor Parámetro"
+                                                      columns="20" 
+                                                      partialTriggers="BtnReset" 
+                                                      binding="#{ParametersBean.poFilterParameterValue}">
+                                        </af:inputText>
+                                        <af:selectOneChoice label="Estatus" id="selStatFil" 
+                                        unselectedLabel="-- Seleccione --"
+                                                            binding="#{ParametersBean.poFilterStatusSel}" 
+                                                            partialTriggers="BtnReset">
+                                            <af:selectItem label="Activo" value="1" id="si1StatFil"/>
+                                            <af:selectItem label="Inactivo" value="0" id="si2StatFil"/>
+                                        </af:selectOneChoice> 
+                                        <af:spacer width="10" height="10" id="s33"/>
+                                        <af:button text="Buscar por Filtros"
+                                                  id="BtnSearch" 
+                                                  icon="/images/ver_orden.gif"
+                                                  shortDesc="Buscar Elementos"
+                                                  action="#{ParametersBean.searchFilterAction}"/>
+                                      </af:panelFormLayout>
+                                    </af:panelGroupLayout>
+                                  </f:facet>
+                                  <f:facet name="second">
+                                  <!-- ################################### TABLA PRINCIPAL ##################################################### !-->
+                                    <af:table value="#{bindings.OlsCatConfigParamTabView1.collectionModel}"
+                                              var="row" rows="#{bindings.OlsCatConfigParamTabView1.rangeSize}"
+                                              emptyText="#{bindings.OlsCatConfigParamTabView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                              rowBandingInterval="0"
+                                              selectedRowKeys="#{bindings.OlsCatConfigParamTabView1.collectionModel.selectedRow}"
+                                              selectionListener="#{bindings.OlsCatConfigParamTabView1.collectionModel.makeCurrent}"
+                                              rowSelection="single"
+                                              fetchSize="#{bindings.OlsCatConfigParamTabView1.rangeSize}" id="tblCgr"
+                                              styleClass="AFStretchWidth"
+                                              autoHeightRows="20"
+                                              columnStretching="column:c6"
+                                              binding="#{ParametersBean.poTblParameters}"
+                                              >
+                                        <af:column align="center" id="colCrudSweb"
+                                                frozen="true" sortable="false"
+                                                width="85">
+                                            <f:facet name="header">
+                                            <af:group id="g2">
+                                                <af:link icon="/images/newIcon_int.png"
+                                                           id="LnkAlta" text="Nuevo"
+                                                           inlineStyle="text-align:center;"
+                                                           shortDesc="Alta de Parámetros"
+                                                         actionListener="#{ParametersBean.showSavePopup}"/>
+                                            </af:group>
+                                            </f:facet>
+                                            <af:panelGroupLayout layout="horizontal"
+                                                                id="PnlOpc" valign="top"
+                                                                halign="left">
+                                                <af:link icon="/images/editIcon_int.png"
+                                                         id="LnkEditSweb"
+                                                         partialSubmit="true"
+                                                         inlineStyle="text-align:center;"
+                                                         actionListener="#{ParametersBean.showEditPopup}"
+                                                         shortDesc="Editar Parámetro"/>
+                                                <af:spacer width="10" id="s8r911w" height="5"/>
+                                                <af:link icon="/images/deleteIcon_int.png"
+                                                         id="LnkDelSweb"
+                                                         inlineStyle="text-align:center;"
+                                                         partialSubmit="true"
+                                                          actionListener="#{ParametersBean.showDeletePopup}"
+                                                         shortDesc="Eliminar Parámetro"/>
+                                                <af:spacer width="10" id="spacer1" height="5"/>
+                                            </af:panelGroupLayout>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.IdParameter.name}"
+                                                   sortable="true"
+                                                   visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.IdParameter.label}"
+                                                   id="c1">
+                                            <af:outputText value="#{row.IdParameter}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.IdParameter.tooltip}"
+                                                           id="ot1">
+                                                <af:convertNumber groupingUsed="false"
+                                                                  pattern="#{bindings.OlsCatConfigParamTabView1.hints.IdParameter.format}"/>
+                                            </af:outputText>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.NomParameter.name}"
+                                                   sortable="true" width="150" align="center"
+                                                   headerText="Parámetro"
+                                                   id="c2">
+                                            <af:outputText value="#{row.NomParameter}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.NomParameter.tooltip}"
+                                                           id="ot2"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.IndDescParameter.name}"
+                                                   sortable="true" width="250" align="center"
+                                                   headerText="Descripción"
+                                                   id="c3">
+                                            <af:outputText value="#{row.IndDescParameter}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.IndDescParameter.tooltip}"
+                                                           id="ot3"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.IndUsedBy.name}"
+                                                   sortable="true" width="100" align="center"
+                                                   headerText="Usado En"
+                                                   id="c4">
+                                            <af:outputText value="#{row.IndUsedBy}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.IndUsedBy.tooltip}"
+                                                           id="ot4"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.IndValueParameter.name}"
+                                                   sortable="true" width="250" align="center"
+                                                   headerText="Valor"
+                                                   id="c5">
+                                            <af:outputText value="#{row.IndValueParameter}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.IndValueParameter.tooltip}"
+                                                           id="ot5"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.IndEstatus.name}"
+                                                   sortable="true" align="center"
+                                                   headerText="Estatus"
+                                                   id="c6">
+                                                   
+                                            <af:selectBooleanCheckbox text="" label=" "
+                                                                  id="sbcEst"
+                                                                  disabled="true"
+                                                                  value="#{row.IndEstatus == '1'}"
+                                                                  />
+                                           
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.AttributeCategory.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.AttributeCategory.label}"
+                                                   id="c7">
+                                            <af:outputText value="#{row.AttributeCategory}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.AttributeCategory.tooltip}"
+                                                           id="ot7"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute1.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute1.label}"
+                                                   id="c8">
+                                            <af:outputText value="#{row.Attribute1}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute1.tooltip}"
+                                                           id="ot8"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute2.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute2.label}"
+                                                   id="c9">
+                                            <af:outputText value="#{row.Attribute2}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute2.tooltip}"
+                                                           id="ot9"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute3.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute3.label}"
+                                                   id="c10">
+                                            <af:outputText value="#{row.Attribute3}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute3.tooltip}"
+                                                           id="ot10"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute4.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute4.label}"
+                                                   id="c11">
+                                            <af:outputText value="#{row.Attribute4}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute4.tooltip}"
+                                                           id="ot11"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute5.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute5.label}"
+                                                   id="c12">
+                                            <af:outputText value="#{row.Attribute5}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute5.tooltip}"
+                                                           id="ot12"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute6.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute6.label}"
+                                                   id="c13">
+                                            <af:outputText value="#{row.Attribute6}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute6.tooltip}"
+                                                           id="ot13"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute7.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute7.label}"
+                                                   id="c14">
+                                            <af:outputText value="#{row.Attribute7}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute7.tooltip}"
+                                                           id="ot14"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute8.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute8.label}"
+                                                   id="c15">
+                                            <af:outputText value="#{row.Attribute8}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute8.tooltip}"
+                                                           id="ot15"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute9.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute9.label}"
+                                                   id="c16">
+                                            <af:outputText value="#{row.Attribute9}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute9.tooltip}"
+                                                           id="ot16"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute10.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute10.label}"
+                                                   id="c17">
+                                            <af:outputText value="#{row.Attribute10}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute10.tooltip}"
+                                                           id="ot17"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute11.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute11.label}"
+                                                   id="c18">
+                                            <af:outputText value="#{row.Attribute11}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute11.tooltip}"
+                                                           id="ot18"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute12.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute12.label}"
+                                                   id="c19">
+                                            <af:outputText value="#{row.Attribute12}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute12.tooltip}"
+                                                           id="ot19"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute13.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute13.label}"
+                                                   id="c20">
+                                            <af:outputText value="#{row.Attribute13}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute13.tooltip}"
+                                                           id="ot20"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute14.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute14.label}"
+                                                   id="c21">
+                                            <af:outputText value="#{row.Attribute14}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute14.tooltip}"
+                                                           id="ot21"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.Attribute15.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.Attribute15.label}"
+                                                   id="c22">
+                                            <af:outputText value="#{row.Attribute15}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.Attribute15.tooltip}"
+                                                           id="ot22"/>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.FecCreationDate.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.FecCreationDate.label}"
+                                                   id="c23">
+                                            <af:outputText value="#{row.FecCreationDate}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.FecCreationDate.tooltip}"
+                                                           id="ot23">
+                                                <af:convertDateTime pattern="#{bindings.OlsCatConfigParamTabView1.hints.FecCreationDate.format}"/>
+                                            </af:outputText>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.NumCreatedBy.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.NumCreatedBy.label}"
+                                                   id="c24">
+                                            <af:outputText value="#{row.NumCreatedBy}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.NumCreatedBy.tooltip}"
+                                                           id="ot24">
+                                                <af:convertNumber groupingUsed="false"
+                                                                  pattern="#{bindings.OlsCatConfigParamTabView1.hints.NumCreatedBy.format}"/>
+                                            </af:outputText>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.FecLastUpdateDate.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.FecLastUpdateDate.label}"
+                                                   id="c25">
+                                            <af:outputText value="#{row.FecLastUpdateDate}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.FecLastUpdateDate.tooltip}"
+                                                           id="ot25">
+                                                <af:convertDateTime pattern="#{bindings.OlsCatConfigParamTabView1.hints.FecLastUpdateDate.format}"/>
+                                            </af:outputText>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.NumLastUpdatedBy.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.NumLastUpdatedBy.label}"
+                                                   id="c26">
+                                            <af:outputText value="#{row.NumLastUpdatedBy}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.NumLastUpdatedBy.tooltip}"
+                                                           id="ot26">
+                                                <af:convertNumber groupingUsed="false"
+                                                                  pattern="#{bindings.OlsCatConfigParamTabView1.hints.NumLastUpdatedBy.format}"/>
+                                            </af:outputText>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.OlsCatConfigParamTabView1.hints.NumLastUpdateLogin.name}"
+                                                   sortable="true" visible="false"
+                                                   headerText="#{bindings.OlsCatConfigParamTabView1.hints.NumLastUpdateLogin.label}"
+                                                   id="c27">
+                                            <af:outputText value="#{row.NumLastUpdateLogin}"
+                                                           shortDesc="#{bindings.OlsCatConfigParamTabView1.hints.NumLastUpdateLogin.tooltip}"
+                                                           id="ot27">
+                                                <af:convertNumber groupingUsed="false"
+                                                                  pattern="#{bindings.OlsCatConfigParamTabView1.hints.NumLastUpdateLogin.format}"/>
+                                            </af:outputText>
+                                        </af:column>
+                                    </af:table>
+                                    </f:facet>
+                            </af:panelSplitter>
+                            </af:panelGroupLayout>
+                        </af:panelGroupLayout>                                        
+                    </f:facet>
+                </af:pageTemplate>
+                <!-- ################################### POPUP ALTA ############################################# !-->
+                <af:popup id="popupSaveParameter" contentDelivery="lazyUncached"
+                          binding="#{ParametersBean.poPopupSave}">
+                    <af:panelWindow id="PnlSave" modal="true" closeIconVisible="false"
+                                    title="Alta Parámetros Generales" titleIconSource="/images/note_new.gif" 
+                                    styleClass="AFStretchWidth">
+                        <af:panelGroupLayout layout="vertical" id="PnlGrpAlta" valign="middle" halign="center" 
+                        styleClass="AFStretchWidth">
+                            <af:panelFormLayout id="PnlFrmAlta" rows="16" maxColumns="1" inlineStyle="width:400px;">                                 
+                                    <af:inputText label="Parámetro"                                                  
+                                                  id="TxtPopSaveParameter"
+                                                  binding="#{ParametersBean.poSaveParameter}">
+                                    </af:inputText>
+                                    <af:inputText label="Descripción"
+                                                  id="TxtPopSaveDescription" 
+                                                  binding="#{ParametersBean.poSaveDescription}">
+                                    </af:inputText>
+                                    <af:inputText label="Usado En"
+                                                  id="TxtPopSaveUsedBy" 
+                                                  binding="#{ParametersBean.poSaveUsedBy}">
+                                    </af:inputText>
+                                    <af:inputText label="Valor"
+                                                  id="TxtPopSaveValue" 
+                                                  binding="#{ParametersBean.poSaveValue}">
+                                    </af:inputText>
+                                    <af:selectBooleanCheckbox text="" label="Estatus" id="sbcSta"
+                                                              binding="#{ParametersBean.poSaveStatus}"/>
+                                                                 
+                                <af:spacer width="10" height="10" id="SpPopTm2"/>
+                            </af:panelFormLayout>
+                            <af:panelGroupLayout id="PnlFrmBtnsPg">
+                                <af:button text="Aceptar" id="BtnAceptAlt" icon="/images/aceptar.gif"
+                                            shortDesc="Guardar Parámetro"
+                                           action="#{ParametersBean.saveAction}"/>
+                                <af:spacer width="10" height="10" id="SpcPopSaveCancel"/>
+                                <af:button text="Cancelar" id="BtnCancelAlt" icon="/images/cancelar.gif" 
+                                shortDesc="Cierra el Popup." immediate="true"
+                                           action="#{ParametersBean.cancelSaveAction}"/>
+                            </af:panelGroupLayout>
+                        </af:panelGroupLayout>
+                    </af:panelWindow>
+                </af:popup>
+                 <!-- ################################### POPUP ELIMINAR ######################################### !-->
+                <af:popup id="popupDelete" contentDelivery="lazyUncached"                          
+                          binding="#{ParametersBean.poPopupDelete}">
+                  <af:panelWindow id="PnlDelete" 
+                               inlineStyle="border-style:none;"
+                               modal="true" 
+                               closeIconVisible="false"
+                               title="Eliminar Parámetro" 
+                               titleIconSource="/images/page_user_light.gif">
+                    <af:panelGroupLayout layout="vertical" 
+                                      id="PnlDeleteWsMsg" 
+                                      inlineStyle="border-style:none;" 
+                                      valign="middle" 
+                                      halign="center">
+                      <af:spacer width="10" height="10" id="SpcLogin_41aDel"/>
+                      <af:panelLabelAndMessage id="PnlLblMsg"
+                                               inlineStyle="border-style:none; color:Olive;"
+                                               binding="#{ParametersBean.poDeleteMsgLbl}"/>
+                         <af:spacer width="50" height="25" id="SpcPopDel01"/>
+                         <af:outputText id="TxtIdBindingsDelete" binding="#{ParametersBean.poDeleteIdBinding}" 
+                         visible="false"/>
+                         <af:panelGroupLayout layout="horizontal" id="PnlEliminarBtns" inlineStyle="border-style:none;" 
+                         valign="middle" halign="center">
+                           <af:button text="Aceptar" id="BtnEliminarAceptar"
+                                             icon="/images/aceptar.gif"
+                                             action="#{ParametersBean.deleteAction}">
+                                <af:clientListener method="enforcePreventUserInput" type="action"/>
+                            </af:button>
+                           <af:spacer width="10" height="25" id="SpcPopDel02"/>
+                           <af:button text="Cancelar" id="BtnEliminarCancelar"
+                                             icon="/images/cancelar.gif"
+                                             action="#{ParametersBean.cancelDeleteAction}"/>
+                       </af:panelGroupLayout> 
+                    </af:panelGroupLayout>
+                  </af:panelWindow>
+                </af:popup>
+                
+                <!-- ################################### POPUP EDITAR ############################################ !-->
+                <af:popup id="popupUdateService" contentDelivery="lazyUncached"
+                          binding="#{ParametersBean.poPopupUpdate}">
+                    <af:panelWindow id="PnlUpdService" modal="true" closeIconVisible="false"
+                                    title="Editar Parámetro" titleIconSource="/images/note_new.gif" 
+                                    styleClass="AFStretchWidth">
+                        <af:panelGroupLayout layout="vertical" id="PnlGrpUpdWs" valign="middle" halign="center" 
+                        styleClass="AFStretchWidth">
+                            <af:panelFormLayout id="PnlFrmUpdWs" rows="17" maxColumns="1" inlineStyle="width:400px;">                                 
+                                    <af:inputText label="idParameter"                                                  
+                                                  visible="false"
+                                                  id="it9Upd"
+                                                  binding="#{ParametersBean.poUpdateIdParameter}">
+                                    </af:inputText>
+                                    <af:inputText label="Parámetro"                                                  
+                                                  id="TxtPopUpdateParameter"
+                                                  binding="#{ParametersBean.poUpdateParameter}">
+                                    </af:inputText>
+                                    <af:inputText label="Descripción"
+                                                  id="TxtPopUpdateDescription" 
+                                                  binding="#{ParametersBean.poUpdateDescription}">
+                                    </af:inputText>
+                                    <af:inputText label="Usado En"
+                                                  id="TxtPopUpdateUsedBy" 
+                                                  binding="#{ParametersBean.poUpdateUsedBy}">
+                                    </af:inputText>
+                                    <af:inputText label="Valor"
+                                                  id="TxtPopUpdateValue" 
+                                                  binding="#{ParametersBean.poUpdateValue}">
+                                    </af:inputText>
+                                    
+                                    <af:selectBooleanCheckbox text="" label="Estatus" id="sbcUpdateSta"
+                                                              binding="#{ParametersBean.poUpdateStatus}"/>
+                                    
+                                <af:separator id="sepTitleEncEd"/>                                  
+                                    
+                                <af:spacer width="10" height="10" id="SpUpdParameter02"/>
+                            </af:panelFormLayout>
+                            <af:panelGroupLayout id="PnlFrmBtnsPgUpd">
+                                <af:button text="Aceptar" id="BtnAceptUpdWs" icon="/images/aceptar.gif"
+                                            shortDesc="Guardar"
+                                           action="#{ParametersBean.updateAction}"/>
+                                <af:spacer width="10" height="10" id="SpcUpd111"/>
+                                <af:button text="Cancelar" id="BtnCancelUpd" icon="/images/cancelar.gif" 
+                                shortDesc="Cierra el Popup." immediate="true"
+                                           action="#{ParametersBean.cancelUpdateAction}"/>
+                            </af:panelGroupLayout>
+                        </af:panelGroupLayout>
+                    </af:panelWindow>
+                </af:popup>
+                
+                <!-- ################################### POPUP LOADING .... ##################################### !-->
+                <af:popup id="popLoading" contentDelivery="immediate">
+                  <af:dialog id="dlgLoading" type="none" title="Procesando Información" closeIconVisible="false">
+                    <af:panelGroupLayout id="PnlLoading" layout="vertical" halign="center">
+                      <af:image source="/images/atom-logo.gif" id="ImgIdxLoad" shortDesc="Cargando..."/>
+                      <af:outputText value="... por favor espere." id="LblIdxLoad1Login"/>
+                    </af:panelGroupLayout>
+                  </af:dialog>
+                </af:popup>
+                
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>

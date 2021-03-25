@@ -1,0 +1,428 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document title="Incidencias" id="d1" smallIconSource="/images/web-icon16x16.png">
+            <af:messages id="m1"/>
+            <af:form id="f1">
+            <af:resource type="javascript">
+                    function enforcePreventUserInput(evt) {                    
+                        var popup = AdfPage.PAGE.findComponentByAbsoluteId('p1oadLogin');
+                        if (popup != null) {
+                            AdfPage.PAGE.addBusyStateListener(popup, handleBusyState);
+                            evt.preventUserInput();
+                        }
+                    }
+                
+                    function handleBusyState(evt) {
+                        var popup = AdfPage.PAGE.findComponentByAbsoluteId('p1oadLogin');
+                        if (popup != null) {
+                            if (evt.isBusy()) {
+                                popup.show();
+                            }
+                            else {
+                                popup.hide();
+                                AdfPage.PAGE.removeBusyStateListener(popup, handleBusyState);
+                            }
+                        }
+                    }        
+                </af:resource>
+                <af:pageTemplate viewId="/templates/olsTemplate.jspx" id="pt1">
+                    <f:facet name="content">
+                    <af:panelGroupLayout layout="scroll" id="PnlCont"
+                                             inlineStyle="border-style:none;">
+                            <af:panelHeader text="Incidencias Clientes" id="PnlHead"
+                                type="default"
+                                messageType="none"
+                                shortDesc="Incidencias Clientes"
+                                inlineStyle="border-style:none;">
+                            <f:facet name="toolbar">
+                                <af:statusIndicator id="StiIndicator" shortDesc="Status Indicator"/>
+                            </f:facet>
+                            </af:panelHeader>
+                            <af:separator id="sepTitle"/>
+                            <af:panelGroupLayout layout="horizontal" id="PnlParGenTbl" styleClass="AFStretchWidth"
+                                                 valign="top" halign="left" 
+                                                 inlineStyle="border-style:none; height:415px;">
+                            <af:panelSplitter id="PnlSplitMain" splitterPosition="302"
+                                      inlineStyle="width:1350px; "
+                                      collapsed="false"
+                                      firstBorder="skin">
+                                <f:facet name="first">
+                                    <af:panelGroupLayout layout="scroll"
+                                                         xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                                                         id="PnlGpAln">
+                                          <af:outputFormatted value="Buscar Parámetro" id="LblBscParGen"
+                                                            inlineStyle="color:Olive; font-weight:bold; 
+                                                            font-size:small; text-align:left;"/>
+                                        <af:separator id="sdedew"/>
+                                        <af:panelGroupLayout layout="horizontal" id="PnlUtil" halign="right"
+                                                            inlineStyle="border-style:none;">
+                                            <af:link text=" " id="BtnReset" 
+                                                    icon="/images/action_refresh_blue.gif" 
+                                                    partialSubmit="true"
+                                                    shortDesc="Reiniciar valores de búsqueda"
+                                                    actionListener="#{IncidentsBean.resetFilterValues}">
+                                            </af:link>
+                                            <af:spacer id="SpcAx" width="10" height="5"/>
+                                            
+                                            <af:link icon="/images/excel.gif"
+                                                               id="LnkExel"
+                                                               inlineStyle="text-align:center;"                                                   
+                                                               shortDesc="Exportar a Excel">
+                                                        
+                                                <af:exportCollectionActionListener exportedId="tblMain"
+                                                                           type="excelHTML"
+                                                                           filename="incidentsXLS.xls"/>
+                                            </af:link>
+                                            <af:spacer id="SpcAxTbl" width="10" height="5"/>
+                                            <af:link text=" " id="BtnResetTbl"
+                                                            icon="/images/restaurar.gif" 
+                                                            shortDesc="Reiniciar tabla"
+                                                     action="#{IncidentsBean.refreshMainTable}">
+                                            </af:link>
+                                        </af:panelGroupLayout>
+                                        <af:panelFormLayout id="PnlSearch" rows="14"
+                                                          maxColumns="1">
+                                        <af:inputNumberSpinbox label="Año" id="TxtAnio1"  visible="false"
+                                                        binding="#{IncidentsBean.poFilterYear}" minimum="2017"
+                                                        partialTriggers="BtnReset"
+                                                        columns="5"/>
+                                        <af:selectOneChoice label="Mes" id="soc1" visible="false"
+                                        binding="#{IncidentsBean.poFilterMonth}"
+                                         partialTriggers="BtnReset">
+                                                    <af:selectItem label="ENERO" value="ENERO" id="si1"/>
+                                                    <af:selectItem label="FEBRERO" value="FEBRERO" id="si2"/>
+                                                    <af:selectItem label="MARZO" value="MARZO" id="si3"/>
+                                                    <af:selectItem label="ABRIL" value="ABRIL" id="si4"/>
+                                                    <af:selectItem label="MAYO" value="MAYO" id="si5"/>
+                                                    <af:selectItem label="JUNIO" value="JUNIO" id="si6"/>
+                                                    <af:selectItem label="JULIO" value="JULIO" id="si7"/>
+                                                    <af:selectItem label="AGOSTO" value="AGOSTO" id="si8"/>
+                                                    <af:selectItem label="SEPTIEMBRE" value="SEPTIEMBRE" id="si9"/>
+                                                    <af:selectItem label="OCTUBRE" value="OCTUBRE" id="si10"/>
+                                                    <af:selectItem label="NOVIEMBRE" value="NOVIEMBRE" id="si11"/>
+                                                    <af:selectItem label="DICIEMBRE" value="DICIEMBRE" id="si12"/>
+                                                </af:selectOneChoice>
+                                        <af:inputText id="TxtFilterReq" label="Solicitud"
+                                                      columns="20" partialTriggers="BtnReset"
+                                                      binding="#{IncidentsBean.poFilterRequest}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtFilterRFC" label="RFC"
+                                                      columns="20" partialTriggers="BtnReset"
+                                                      binding="#{IncidentsBean.poFilterRfc}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtFilterType"
+                                                      label="Tipo Cliente" columns="20" partialTriggers="BtnReset"
+                                                      binding="#{IncidentsBean.poFilterType}">
+                                        </af:inputText>                                        
+                                        <af:spacer width="10" height="10" id="s33"/>
+                                        <af:button text="Buscar por Filtros"
+                                                  id="BtnSearch" 
+                                                  icon="/images/ver_orden.gif"
+                                                  shortDesc="Buscar Elementos"
+                                                  action="#{IncidentsBean.searchFilterAction}"/>
+                                      </af:panelFormLayout>
+                                    </af:panelGroupLayout>
+                                  </f:facet>
+                                  <f:facet name="second">
+                                  <af:panelGroupLayout id="PnlTbl" layout="vertical" halign="center">
+                                  <af:link icon="/images/excel.gif"
+                                                               id="LnkEl"
+                                                               inlineStyle="text-align:center;"                                                   
+                                                               shortDesc="Exportar a Excel">
+                                                <af:exportCollectionActionListener exportedId="tblMain"
+                                                                           type="excelHTML"
+                                                                           filename="incidentsXLS.xls"/>
+                                            </af:link>
+                                  <!-- ################################### TABLA PRINCIPAL ##################################################### !-->
+                                        <af:table value="#{bindings.OlsTrxSatUploadErrTabView1.collectionModel}"
+                                                  var="row" rows="#{bindings.OlsTrxSatUploadErrTabView1.rangeSize}"
+                                                  emptyText="#{bindings.OlsTrxSatUploadErrTabView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                                  rowBandingInterval="0"
+                                                  selectedRowKeys="#{bindings.OlsTrxSatUploadErrTabView1.collectionModel.selectedRow}"
+                                                  selectionListener="#{bindings.OlsTrxSatUploadErrTabView1.collectionModel.makeCurrent}"
+                                                  rowSelection="single"
+                                                  fetchSize="#{bindings.OlsTrxSatUploadErrTabView1.rangeSize}" id="tblMain"
+                                              styleClass="AFStretchWidth"
+                                              autoHeightRows="20"
+                                              columnStretching="column:c11"
+                                              binding="#{IncidentsBean.poTblMain}">
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.IdUploadErr.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.IdUploadErr.label}"
+                                                       id="c1">
+                                                <af:outputText value="#{row.IdUploadErr}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.IdUploadErr.tooltip}"
+                                                               id="ot1">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsTrxSatUploadErrTabView1.hints.IdUploadErr.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.IdRequest.name}"
+                                                       sortable="true" align="center" width="100"
+                                                       headerText="Solicitud"
+                                                       id="c2">
+                                                <af:outputText value="#{row.IdRequest}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.IdRequest.tooltip}"
+                                                               id="ot2">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsTrxSatUploadErrTabView1.hints.IdRequest.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.IdRowExcel.name}"
+                                                       sortable="true" align="center" width="100"
+                                                       headerText="Fila de Excel"
+                                                       id="c3">
+                                                <af:outputText value="#{row.IdRowExcel}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.IdRowExcel.tooltip}"
+                                                               id="ot3">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsTrxSatUploadErrTabView1.hints.IdRowExcel.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.IndRfc.name}"
+                                                       sortable="true" align="center" width="150"
+                                                       headerText="#RFC"
+                                                       id="c4">
+                                                <af:outputText value="#{row.IndRfc}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.IndRfc.tooltip}"
+                                                               id="ot4"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.IndTypeClient.name}"
+                                                       sortable="true"  align="center" width="150"
+                                                       headerText="Tipo"
+                                                       id="c5">
+                                                <af:outputText value="#{row.IndTypeClient}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.IndTypeClient.tooltip}"
+                                                               id="ot5"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.IndDesError.name}"
+                                                       sortable="true" align="center" width="250"
+                                                       headerText="Comentario"
+                                                       id="c6">
+                                                <af:outputText value="#{row.IndDesError}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.IndDesError.tooltip}"
+                                                               id="ot6"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.IndFileName.name}"
+                                                       sortable="true" align="center" width="150"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.IndFileName.label}"
+                                                       id="c7">
+                                                <af:outputText value="#{row.IndFileName}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.IndFileName.tooltip}"
+                                                               id="ot7"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.IndEstatus.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.IndEstatus.label}"
+                                                       id="c8">
+                                                <af:outputText value="#{row.IndEstatus}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.IndEstatus.tooltip}"
+                                                               id="ot8"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.AttributeCategory.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.AttributeCategory.label}"
+                                                       id="c9">
+                                                <af:outputText value="#{row.AttributeCategory}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.AttributeCategory.tooltip}"
+                                                               id="ot9"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute1.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute1.label}"
+                                                       id="c10">
+                                                <af:outputText value="#{row.Attribute1}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute1.tooltip}"
+                                                               id="ot10"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute2.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute2.label}"
+                                                       id="c11">
+                                                <af:outputText value="#{row.Attribute2}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute2.tooltip}"
+                                                               id="ot11"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute3.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute3.label}"
+                                                       id="c12">
+                                                <af:outputText value="#{row.Attribute3}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute3.tooltip}"
+                                                               id="ot12"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute4.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute4.label}"
+                                                       id="c13">
+                                                <af:outputText value="#{row.Attribute4}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute4.tooltip}"
+                                                               id="ot13"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute5.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute5.label}"
+                                                       id="c14">
+                                                <af:outputText value="#{row.Attribute5}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute5.tooltip}"
+                                                               id="ot14"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute6.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute6.label}"
+                                                       id="c15">
+                                                <af:outputText value="#{row.Attribute6}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute6.tooltip}"
+                                                               id="ot15"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute7.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute7.label}"
+                                                       id="c16">
+                                                <af:outputText value="#{row.Attribute7}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute7.tooltip}"
+                                                               id="ot16"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute8.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute8.label}"
+                                                       id="c17">
+                                                <af:outputText value="#{row.Attribute8}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute8.tooltip}"
+                                                               id="ot17"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute9.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute9.label}"
+                                                       id="c18">
+                                                <af:outputText value="#{row.Attribute9}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute9.tooltip}"
+                                                               id="ot18"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute10.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute10.label}"
+                                                       id="c19">
+                                                <af:outputText value="#{row.Attribute10}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute10.tooltip}"
+                                                               id="ot19"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute11.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute11.label}"
+                                                       id="c20">
+                                                <af:outputText value="#{row.Attribute11}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute11.tooltip}"
+                                                               id="ot20"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute12.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute12.label}"
+                                                       id="c21">
+                                                <af:outputText value="#{row.Attribute12}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute12.tooltip}"
+                                                               id="ot21"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute13.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute13.label}"
+                                                       id="c22">
+                                                <af:outputText value="#{row.Attribute13}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute13.tooltip}"
+                                                               id="ot22"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute14.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute14.label}"
+                                                       id="c23">
+                                                <af:outputText value="#{row.Attribute14}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute14.tooltip}"
+                                                               id="ot23"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute15.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute15.label}"
+                                                       id="c24">
+                                                <af:outputText value="#{row.Attribute15}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.Attribute15.tooltip}"
+                                                               id="ot24"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.FecCreationDate.name}"
+                                                       sortable="true" align="center" width="120"
+                                                       headerText="Fecha"
+                                                       id="c25">
+                                                <af:outputText value="#{row.FecCreationDate}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.FecCreationDate.tooltip}"
+                                                               id="ot25">
+                                                    <af:convertDateTime pattern="#{bindings.OlsTrxSatUploadErrTabView1.hints.FecCreationDate.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.NumCreatedBy.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.NumCreatedBy.label}"
+                                                       id="c26">
+                                                <af:outputText value="#{row.NumCreatedBy}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.NumCreatedBy.tooltip}"
+                                                               id="ot26">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsTrxSatUploadErrTabView1.hints.NumCreatedBy.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.FecLastUpdateDate.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.FecLastUpdateDate.label}"
+                                                       id="c27">
+                                                <af:outputText value="#{row.FecLastUpdateDate}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.FecLastUpdateDate.tooltip}"
+                                                               id="ot27">
+                                                    <af:convertDateTime pattern="#{bindings.OlsTrxSatUploadErrTabView1.hints.FecLastUpdateDate.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.NumLastUpdatedBy.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.NumLastUpdatedBy.label}"
+                                                       id="c28">
+                                                <af:outputText value="#{row.NumLastUpdatedBy}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.NumLastUpdatedBy.tooltip}"
+                                                               id="ot28">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsTrxSatUploadErrTabView1.hints.NumLastUpdatedBy.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsTrxSatUploadErrTabView1.hints.NumLastUpdateLogin.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsTrxSatUploadErrTabView1.hints.NumLastUpdateLogin.label}"
+                                                       id="c29">
+                                                <af:outputText value="#{row.NumLastUpdateLogin}"
+                                                               shortDesc="#{bindings.OlsTrxSatUploadErrTabView1.hints.NumLastUpdateLogin.tooltip}"
+                                                               id="ot29">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsTrxSatUploadErrTabView1.hints.NumLastUpdateLogin.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                        </af:table>
+                                </af:panelGroupLayout>
+                                </f:facet>
+                            </af:panelSplitter>
+                            </af:panelGroupLayout>
+                        </af:panelGroupLayout>                                        
+                    </f:facet>
+                </af:pageTemplate>
+                <!-- ################################### POPUP LOADING .... ##################################### !-->
+                <af:popup id="popLoading" contentDelivery="immediate">
+                  <af:dialog id="dlgLoading" type="none" title="Procesando Información" closeIconVisible="false">
+                    <af:panelGroupLayout id="PnlLoading" layout="vertical" halign="center">
+                      <af:image source="/images/atom-logo.gif" id="ImgIdxLoad" shortDesc="Cargando..."/>
+                      <af:outputText value="... por favor espere." id="LblIdxLoad1Login"/>
+                    </af:panelGroupLayout>
+                  </af:dialog>
+                </af:popup>
+                
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>
+

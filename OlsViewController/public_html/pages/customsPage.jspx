@@ -1,0 +1,1232 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document title="Administración de Clientes" id="d1" smallIconSource="/images/web-icon16x16.png">
+            <af:messages id="m1"/>
+            <af:form id="f1">
+            <af:resource type="javascript">
+                    function enforcePreventUserInput(evt) {                    
+                        var popup = AdfPage.PAGE.findComponentByAbsoluteId('p1oadLogin');
+                        if (popup != null) {
+                            AdfPage.PAGE.addBusyStateListener(popup, handleBusyState);
+                            evt.preventUserInput();
+                        }
+                    }
+                
+                    function handleBusyState(evt) {
+                        var popup = AdfPage.PAGE.findComponentByAbsoluteId('p1oadLogin');
+                        if (popup != null) {
+                            if (evt.isBusy()) {
+                                popup.show();
+                            }
+                            else {
+                                popup.hide();
+                                AdfPage.PAGE.removeBusyStateListener(popup, handleBusyState);
+                            }
+                        }
+                    }        
+                </af:resource>
+                <af:pageTemplate viewId="/templates/olsTemplate.jspx" id="pt1">
+                    <f:facet name="content">
+                    <af:panelGroupLayout layout="scroll" id="PnlCont"
+                                             inlineStyle="border-style:none;">
+                            <af:panelHeader text="Administracíon de Clientes" id="PnlHead"
+                                type="default"
+                                messageType="none"
+                                shortDesc="Administracíon de Clientes"
+                                inlineStyle="border-style:none;">
+                            <f:facet name="toolbar">
+                                <af:statusIndicator id="StiIndicator" shortDesc="Status Indicator"/>
+                            </f:facet>
+                            </af:panelHeader>
+                            <af:separator id="sepTitle"/>
+                            <af:panelGroupLayout layout="horizontal" id="PnlParGenTbl" styleClass="AFStretchWidth"
+                                                 valign="top" halign="left" 
+                                                 inlineStyle="border-style:none; height:415px;">
+                            <af:panelSplitter id="PnlSplitMain" splitterPosition="302"
+                                      inlineStyle="width:1350px; "
+                                      collapsed="false"
+                                      firstBorder="skin">
+                                <f:facet name="first">
+                                    <af:panelGroupLayout layout="scroll"
+                                                         xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                                                         id="PnlGpAln">
+                                          <af:outputFormatted value="Buscar Parámetro" id="LblBscParGen"
+                                                            inlineStyle="color:Olive; font-weight:bold; 
+                                                            font-size:small; text-align:left;"/>
+                                        <af:separator id="sdedew"/>
+                                        <af:panelGroupLayout layout="horizontal" id="PnlUtil" halign="right"
+                                                            inlineStyle="border-style:none;">
+                                            <af:link text=" " id="BtnReset" 
+                                                    icon="/images/action_refresh_blue.gif" 
+                                                    partialSubmit="true"
+                                                    shortDesc="Reiniciar valores de búsqueda"
+                                                    actionListener="#{CustomsBean.resetFilterValues}">
+                                            </af:link>
+                                            <af:spacer id="SpcAx" width="10" height="5"/>
+                                            
+                                            <af:link icon="/images/excel.gif"
+                                                               id="LnkExel"
+                                                               inlineStyle="text-align:center;"                                                   
+                                                               shortDesc="Exportar a Excel">
+                                                <af:exportCollectionActionListener exportedId="tblMain"
+                                                                           type="excelHTML"
+                                                                           filename="customsXLS.xls"/>
+                                            </af:link>
+                                            <af:spacer id="SpcAxTbl" width="10" height="5"/>
+                                            <af:link text=" " id="BtnResetTbl"
+                                                            icon="/images/restaurar.gif" 
+                                                            shortDesc="Reiniciar tabla"
+                                                     action="#{CustomsBean.refreshMainTable}">
+                                            </af:link>
+                                        </af:panelGroupLayout>
+                                        <af:panelFormLayout id="PnlSearch" rows="14"
+                                                          maxColumns="1">
+                                                          
+                                        <af:inputNumberSpinbox label="Año" id="TxtAnio" visible="false"
+                                                        binding="#{CustomsBean.poFilterYear}" minimum="2017"
+                                                        partialTriggers="BtnReset"
+                                                        columns="5"/>
+                                        <af:selectOneChoice label="Mes" id="soc1"  visible="false"
+                                        binding="#{CustomsBean.poFilterMonth}"
+                                         partialTriggers="BtnReset">
+                                                    <af:selectItem label="ENERO" value="ENERO" id="si1"/>
+                                                    <af:selectItem label="FEBRERO" value="FEBRERO" id="si2"/>
+                                                    <af:selectItem label="MARZO" value="MARZO" id="si3"/>
+                                                    <af:selectItem label="ABRIL" value="ABRIL" id="si4"/>
+                                                    <af:selectItem label="MAYO" value="MAYO" id="si5"/>
+                                                    <af:selectItem label="JUNIO" value="JUNIO" id="si6"/>
+                                                    <af:selectItem label="JULIO" value="JULIO" id="si7"/>
+                                                    <af:selectItem label="AGOSTO" value="AGOSTO" id="si8"/>
+                                                    <af:selectItem label="SEPTIEMBRE" value="SEPTIEMBRE" id="si9"/>
+                                                    <af:selectItem label="OCTUBRE" value="OCTUBRE" id="si10"/>
+                                                    <af:selectItem label="NOVIEMBRE" value="NOVIEMBRE" id="si11"/>
+                                                    <af:selectItem label="DICIEMBRE" value="DICIEMBRE" id="si12"/>
+                                                </af:selectOneChoice>
+                                        <af:inputText id="TxtFilterRFC" label="RFC"
+                                                      columns="20" partialTriggers="BtnReset"
+                                                      binding="#{CustomsBean.poFilterRfc}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtFilterNomClient"
+                                                      label="Cliente" columns="20" partialTriggers="BtnReset"
+                                                      binding="#{CustomsBean.poFilterCompany}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtFilterAddress"
+                                                      label="Dirección" columns="20" partialTriggers="BtnReset"
+                                                      binding="#{CustomsBean.poFilterAddress}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtFilterTel" label="Teléfono"
+                                                      columns="20" partialTriggers="BtnReset"
+                                                      binding="#{CustomsBean.poFilterPhoneNumber}">
+                                        </af:inputText>                                        
+                                        <af:selectOneChoice label="Estatus" id="selStatFil" 
+                                                unselectedLabel="-- Seleccione --"
+                                                binding="#{CustomsBean.poFilterStatusSel}" 
+                                                partialTriggers="BtnReset">
+                                            <af:selectItem label="Activo" value="1" id="si1StatFil"/>
+                                            <af:selectItem label="Inactivo" value="0" id="si2StatFil"/>
+                                        </af:selectOneChoice> 
+                                        <af:spacer width="10" height="10" id="s33"/>
+                                        <af:button text="Buscar por Filtros"
+                                                  id="BtnSearch" 
+                                                  icon="/images/ver_orden.gif"
+                                                  shortDesc="Buscar Elementos"
+                                                  action="#{CustomsBean.searchFilterAction}"/>
+                                      </af:panelFormLayout>
+                                    </af:panelGroupLayout>
+                                  </f:facet>
+                                  <f:facet name="second">
+                                  <!-- ################################### TABLA PRINCIPAL ##################################################### !-->
+                                  
+                                   <af:table value="#{bindings.OlsCatSatClientsOlsTabView1.collectionModel}"
+                                                  var="row" rows="#{bindings.OlsCatSatClientsOlsTabView1.rangeSize}"
+                                                  emptyText="#{bindings.OlsCatSatClientsOlsTabView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                                  rowBandingInterval="0"
+                                                  selectedRowKeys="#{bindings.OlsCatSatClientsOlsTabView1.collectionModel.selectedRow}"
+                                                  selectionListener="#{bindings.OlsCatSatClientsOlsTabView1.collectionModel.makeCurrent}"
+                                                  rowSelection="single"
+                                                  fetchSize="#{bindings.OlsCatSatClientsOlsTabView1.rangeSize}" id="tblMain"
+                                              styleClass="AFStretchWidth"
+                                              autoHeightRows="20"
+                                              columnStretching="column:c11"
+                                              binding="#{CustomsBean.poTblMain}"
+                                              >
+                                        <af:column align="center" id="colCrudSweb"
+                                                frozen="true" sortable="false"
+                                                width="85">
+                                            <f:facet name="header">
+                                            <af:group id="g2">
+                                                <af:link icon="/images/newIcon_int.png"
+                                                           id="LnkAlta" text="Nuevo"
+                                                           inlineStyle="text-align:center;"
+                                                           shortDesc="Alta"
+                                                         actionListener="#{CustomsBean.showSavePopup}"/>
+                                            </af:group>
+                                            </f:facet>
+                                            <af:panelGroupLayout layout="horizontal"
+                                                                id="PnlOpc" valign="top"
+                                                                halign="left">
+                                                <af:link icon="/images/editIcon_int.png"
+                                                         id="LnkEditSweb"
+                                                         partialSubmit="true"
+                                                         inlineStyle="text-align:center;"
+                                                         actionListener="#{CustomsBean.showEditPopup}"
+                                                         shortDesc="Editar"/>
+                                                <af:spacer width="10" id="s8r911w" height="5"/>
+                                                <af:link icon="/images/deleteIcon_int.png"
+                                                         id="LnkDelSweb"
+                                                         inlineStyle="text-align:center;"
+                                                         partialSubmit="true"
+                                                          actionListener="#{CustomsBean.showDeletePopup}"
+                                                         shortDesc="Eliminar"/>
+                                                <af:spacer width="10" id="spacer1" height="5"/>
+                                            </af:panelGroupLayout>
+                                        </af:column>
+                                        <af:column align="center" id="colvieweb"
+                                                frozen="true" sortable="false"
+                                                width="85">
+                                            <f:facet name="header">
+                                            <af:group id="g2view">
+                                                <af:outputText value="Emails" id="ot154view"/>
+                                            </af:group>
+                                            </f:facet>
+                                            <af:panelGroupLayout layout="horizontal"
+                                                                id="PnlOpcview" valign="top"
+                                                                halign="left">
+                                                <af:link icon="/images/tables.gif"
+                                                         id="Lnkview"
+                                                         inlineStyle="text-align:center;"
+                                                         visible="true"
+                                                         actionListener="#{CustomsBean.showEmailsPopup}"
+                                                         shortDesc="Ver Direcciones de Correo">
+                                                </af:link>
+                                            </af:panelGroupLayout>
+                                        </af:column>
+                                        
+                                        <af:column align="center" id="colProv"
+                                                frozen="true" sortable="false"
+                                                width="85">
+                                            <f:facet name="header">
+                                            <af:group id="g2Prov">
+                                                <af:outputText value="Proveedores" id="ot154Prov"/>
+                                            </af:group>
+                                            </f:facet>
+                                            <af:panelGroupLayout layout="horizontal"
+                                                                id="PnlOpcProv" valign="top"
+                                                                halign="left">
+                                                <af:link icon="/images/perfil_puesto.gif"
+                                                         id="LnkProv"
+                                                         inlineStyle="text-align:center;"
+                                                         visible="true"
+                                                         actionListener="#{CustomsBean.showProvidersPopup}"
+                                                         shortDesc="Ver Proveedores del Cliente">
+                                                </af:link>
+                                            </af:panelGroupLayout>
+                                        </af:column>
+                                        
+                                        
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.IdClientSat.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.IdClientSat.label}"
+                                                       id="c1">
+                                                <af:outputText value="#{row.IdClientSat}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.IdClientSat.tooltip}"
+                                                               id="ot1">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsCatSatClientsOlsTabView1.hints.IdClientSat.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.IdRequest.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.IdRequest.label}"
+                                                       id="c2">
+                                                <af:outputText value="#{row.IdRequest}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.IdRequest.tooltip}"
+                                                               id="ot2">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsCatSatClientsOlsTabView1.hints.IdRequest.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndYear.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndYear.label}"
+                                                       id="c3">
+                                                <af:outputText value="#{row.IndYear}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndYear.tooltip}"
+                                                               id="ot3">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndYear.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndMonth.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndMonth.label}"
+                                                       id="c4">
+                                                <af:outputText value="#{row.IndMonth}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndMonth.tooltip}"
+                                                               id="ot4">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndMonth.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndPeriod.name}"
+                                                       sortable="true" align="center" frozen="true" visible="false"
+                                                       headerText="Periodo"
+                                                       id="c5">
+                                                <af:outputText value="#{row.IndPeriod}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndPeriod.tooltip}"
+                                                               id="ot5"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.IdLawFirm.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.IdLawFirm.label}"
+                                                       id="c6">
+                                                <af:outputText value="#{row.IdLawFirm}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.IdLawFirm.tooltip}"
+                                                               id="ot6">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsCatSatClientsOlsTabView1.hints.IdLawFirm.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndRfc.name}"
+                                                       sortable="true" align="center" frozen="true"
+                                                       headerText="RFC"
+                                                       id="c7">
+                                                <af:outputText value="#{row.IndRfc}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndRfc.tooltip}"
+                                                               id="ot7"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndCompany.name}"
+                                                       sortable="true" align="center" width="320"
+                                                       headerText="Cliente"
+                                                       id="c8">
+                                                <af:outputText value="#{row.IndCompany}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndCompany.tooltip}"
+                                                               id="ot8"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndAddress.name}"
+                                                       sortable="true" align="center"
+                                                       headerText="Dirección"
+                                                       id="c9">
+                                                <af:outputText value="#{row.IndAddress}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndAddress.tooltip}"
+                                                               id="ot9"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndPhoneNumber.name}"
+                                                       sortable="true" align="center" 
+                                                       headerText="Teléfono"
+                                                       id="c10">
+                                                <af:outputText value="#{row.IndPhoneNumber}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndPhoneNumber.tooltip}"
+                                                               id="ot10"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.IndEstatus.name}"
+                                                       sortable="true" align="center"
+                                                       headerText="Estatus"
+                                                       id="c11">
+                                                <af:selectBooleanCheckbox text="" label=" "
+                                                                  id="sbcEst"
+                                                                  disabled="true"
+                                                                  value="#{row.IndEstatus == '1'}"
+                                                                  />
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.AttributeCategory.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.AttributeCategory.label}"
+                                                       id="c12">
+                                                <af:outputText value="#{row.AttributeCategory}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.AttributeCategory.tooltip}"
+                                                               id="ot12"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute1.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute1.label}"
+                                                       id="c13">
+                                                <af:outputText value="#{row.Attribute1}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute1.tooltip}"
+                                                               id="ot13"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute2.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute2.label}"
+                                                       id="c14">
+                                                <af:outputText value="#{row.Attribute2}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute2.tooltip}"
+                                                               id="ot14"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute3.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute3.label}"
+                                                       id="c15">
+                                                <af:outputText value="#{row.Attribute3}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute3.tooltip}"
+                                                               id="ot15"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute4.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute4.label}"
+                                                       id="c16">
+                                                <af:outputText value="#{row.Attribute4}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute4.tooltip}"
+                                                               id="ot16"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute5.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute5.label}"
+                                                       id="c17">
+                                                <af:outputText value="#{row.Attribute5}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute5.tooltip}"
+                                                               id="ot17"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute6.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute6.label}"
+                                                       id="c18">
+                                                <af:outputText value="#{row.Attribute6}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute6.tooltip}"
+                                                               id="ot18"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute7.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute7.label}"
+                                                       id="c19">
+                                                <af:outputText value="#{row.Attribute7}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute7.tooltip}"
+                                                               id="ot19"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute8.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute8.label}"
+                                                       id="c20">
+                                                <af:outputText value="#{row.Attribute8}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute8.tooltip}"
+                                                               id="ot20"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute9.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute9.label}"
+                                                       id="c21">
+                                                <af:outputText value="#{row.Attribute9}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute9.tooltip}"
+                                                               id="ot21"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute10.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute10.label}"
+                                                       id="c22">
+                                                <af:outputText value="#{row.Attribute10}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute10.tooltip}"
+                                                               id="ot22"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute11.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute11.label}"
+                                                       id="c23">
+                                                <af:outputText value="#{row.Attribute11}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute11.tooltip}"
+                                                               id="ot23"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute12.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute12.label}"
+                                                       id="c24">
+                                                <af:outputText value="#{row.Attribute12}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute12.tooltip}"
+                                                               id="ot24"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute13.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute13.label}"
+                                                       id="c25">
+                                                <af:outputText value="#{row.Attribute13}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute13.tooltip}"
+                                                               id="ot25"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute14.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute14.label}"
+                                                       id="c26">
+                                                <af:outputText value="#{row.Attribute14}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute14.tooltip}"
+                                                               id="ot26"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute15.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute15.label}"
+                                                       id="c27">
+                                                <af:outputText value="#{row.Attribute15}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.Attribute15.tooltip}"
+                                                               id="ot27"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.FecCreationDate.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.FecCreationDate.label}"
+                                                       id="c28">
+                                                <af:outputText value="#{row.FecCreationDate}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.FecCreationDate.tooltip}"
+                                                               id="ot28">
+                                                    <af:convertDateTime pattern="#{bindings.OlsCatSatClientsOlsTabView1.hints.FecCreationDate.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.NumCreatedBy.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.NumCreatedBy.label}"
+                                                       id="c29">
+                                                <af:outputText value="#{row.NumCreatedBy}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.NumCreatedBy.tooltip}"
+                                                               id="ot29">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsCatSatClientsOlsTabView1.hints.NumCreatedBy.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.FecLastUpdateDate.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.FecLastUpdateDate.label}"
+                                                       id="c30">
+                                                <af:outputText value="#{row.FecLastUpdateDate}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.FecLastUpdateDate.tooltip}"
+                                                               id="ot30">
+                                                    <af:convertDateTime pattern="#{bindings.OlsCatSatClientsOlsTabView1.hints.FecLastUpdateDate.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.NumLastUpdatedBy.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.NumLastUpdatedBy.label}"
+                                                       id="c31">
+                                                <af:outputText value="#{row.NumLastUpdatedBy}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.NumLastUpdatedBy.tooltip}"
+                                                               id="ot31">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsCatSatClientsOlsTabView1.hints.NumLastUpdatedBy.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsCatSatClientsOlsTabView1.hints.NumLastUpdateLogin.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsCatSatClientsOlsTabView1.hints.NumLastUpdateLogin.label}"
+                                                       id="c32">
+                                                <af:outputText value="#{row.NumLastUpdateLogin}"
+                                                               shortDesc="#{bindings.OlsCatSatClientsOlsTabView1.hints.NumLastUpdateLogin.tooltip}"
+                                                               id="ot32">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsCatSatClientsOlsTabView1.hints.NumLastUpdateLogin.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                        </af:table>
+                                    
+                                  
+                                  </f:facet>
+                            </af:panelSplitter>
+                            </af:panelGroupLayout>
+                        </af:panelGroupLayout>                                        
+                    </f:facet>
+                </af:pageTemplate>
+                <!-- ################################### POPUP ALTA ############################################# !-->
+                <af:popup id="popupSave" contentDelivery="lazyUncached"
+                          binding="#{CustomsBean.poPopupSave}">
+                    <af:panelWindow id="PnlSave" modal="true" closeIconVisible="false"
+                                    title="Alta Clientes" titleIconSource="/images/note_new.gif" 
+                                    styleClass="AFStretchWidth">
+                        <af:panelGroupLayout layout="vertical" id="PnlGrpAlta" valign="middle" halign="center" 
+                        styleClass="AFStretchWidth">
+                            <af:panelFormLayout id="PnlFrmAlta" rows="16" maxColumns="1" inlineStyle="width:400px;">
+                                <af:inputNumberSpinbox label="Año" id="TxtSaveAnio" visible="false"
+                                                        binding="#{CustomsBean.poSaveYear}" minimum="2017"
+                                                        columns="5"/>
+                                        <af:selectOneChoice label="Mes" id="soc1a" visible="false" binding="#{CustomsBean.poSaveMonth}">
+                                                    <af:selectItem label="ENERO" value="ENERO" id="si1a"/>
+                                                    <af:selectItem label="FEBRERO" value="FEBRERO" id="si2a"/>
+                                                    <af:selectItem label="MARZO" value="MARZO" id="si3a"/>
+                                                    <af:selectItem label="ABRIL" value="ABRIL" id="si4a"/>
+                                                    <af:selectItem label="MAYO" value="MAYO" id="si5a"/>
+                                                    <af:selectItem label="JUNIO" value="JUNIO" id="si6a"/>
+                                                    <af:selectItem label="JULIO" value="JULIO" id="si7a"/>
+                                                    <af:selectItem label="AGOSTO" value="AGOSTO" id="si8a"/>
+                                                    <af:selectItem label="SEPTIEMBRE" value="SEPTIEMBRE" id="si9a"/>
+                                                    <af:selectItem label="OCTUBRE" value="OCTUBRE" id="si10a"/>
+                                                    <af:selectItem label="NOVIEMBRE" value="NOVIEMBRE" id="si11a"/>
+                                                    <af:selectItem label="DICIEMBRE" value="DICIEMBRE" id="si12a"/>
+                                                </af:selectOneChoice>
+                                        <af:inputText id="TxtSaveRFC" label="RFC"
+                                                      columns="20"
+                                                      binding="#{CustomsBean.poSaveRfc}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtSaveNomClient"
+                                                      label="Cliente" columns="20"
+                                                      binding="#{CustomsBean.poSaveCompany}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtSaveAddress"
+                                                      label="Dirección" columns="20"
+                                                      binding="#{CustomsBean.poSaveAddress}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtSaveTel" label="Teléfono"
+                                                      columns="20"
+                                                      binding="#{CustomsBean.poSavePhoneNumber}">
+                                        </af:inputText>                                        
+                                <af:selectBooleanCheckbox text="" label="Estatus" id="sbcSta"
+                                                          binding="#{CustomsBean.poSaveStatus}"/>
+                                                                 
+                                <af:spacer width="10" height="10" id="SpPopTm2"/>
+                            </af:panelFormLayout>
+                            <af:panelGroupLayout id="PnlFrmBtnsPg">
+                                <af:button text="Aceptar" id="BtnAceptAlt" icon="/images/aceptar.gif"
+                                            shortDesc="Guardar"
+                                           action="#{CustomsBean.saveAction}"/>
+                                <af:spacer width="10" height="10" id="SpcPopSaveCancel"/>
+                                <af:button text="Cancelar" id="BtnCancelAlt" icon="/images/cancelar.gif" 
+                                shortDesc="Cierra el Popup." immediate="true"
+                                           action="#{CustomsBean.cancelSaveAction}"/>
+                            </af:panelGroupLayout>
+                        </af:panelGroupLayout>
+                    </af:panelWindow>
+                </af:popup>
+                 <!-- ################################### POPUP ELIMINAR ######################################### !-->
+                <af:popup id="popupDelete" contentDelivery="lazyUncached"                          
+                          binding="#{CustomsBean.poPopupDelete}">
+                  <af:panelWindow id="PnlDelete" 
+                               inlineStyle="border-style:none;"
+                               modal="true" 
+                               closeIconVisible="false"
+                               title="Eliminar Cliente" 
+                               titleIconSource="/images/page_user_light.gif">
+                    <af:panelGroupLayout layout="vertical" 
+                                      id="PnlDeleteWsMsg" 
+                                      inlineStyle="border-style:none;" 
+                                      valign="middle" 
+                                      halign="center">
+                      <af:spacer width="10" height="10" id="SpcLogin_41aDel"/>
+                      <af:panelLabelAndMessage id="PnlLblMsg"
+                                               inlineStyle="border-style:none; color:Olive;"
+                                               binding="#{CustomsBean.poDeleteMsgLbl}"/>
+                         <af:spacer width="50" height="25" id="SpcPopDel01"/>
+                         <af:outputText id="TxtIdBindingsDelete" binding="#{CustomsBean.poDeleteIdBinding}" 
+                         visible="false"/>
+                         <af:panelGroupLayout layout="horizontal" id="PnlEliminarBtns" inlineStyle="border-style:none;" 
+                         valign="middle" halign="center">
+                           <af:button text="Aceptar" id="BtnEliminarAceptar"
+                                             icon="/images/aceptar.gif"
+                                             action="#{CustomsBean.deleteAction}">
+                                <af:clientListener method="enforcePreventUserInput" type="action"/>
+                            </af:button>
+                           <af:spacer width="10" height="25" id="SpcPopDel02"/>
+                           <af:button text="Cancelar" id="BtnEliminarCancelar"
+                                             icon="/images/cancelar.gif"
+                                             action="#{CustomsBean.cancelDeleteAction}"/>
+                       </af:panelGroupLayout> 
+                    </af:panelGroupLayout>
+                  </af:panelWindow>
+                </af:popup>
+                
+                <!-- ################################### POPUP EDITAR ############################################ !-->
+                <af:popup id="popupUdate" contentDelivery="lazyUncached"
+                          binding="#{CustomsBean.poPopupUpdate}">
+                    <af:panelWindow id="PnlUpdService" modal="true" closeIconVisible="false"
+                                    title="Editar Usuario" titleIconSource="/images/note_new.gif" 
+                                    styleClass="AFStretchWidth">
+                        <af:panelGroupLayout layout="vertical" id="PnlGrpUpdWs" valign="middle" halign="center" 
+                        styleClass="AFStretchWidth">
+                            <af:panelFormLayout id="PnlFrmUpdWs" rows="17" maxColumns="1" inlineStyle="width:400px;">                                 
+                                    <af:inputText label="idUser"                                                  
+                                                  visible="false"
+                                                  id="it9Upd"
+                                                  binding="#{CustomsBean.poUpdateIdClient}">
+                                    </af:inputText>
+                                    
+                                    <af:inputNumberSpinbox label="Año" id="TxtUpdateAnio" visible="false"
+                                                        binding="#{CustomsBean.poUpdateYear}" minimum="2017"
+                                                        columns="5"/>
+                                        <af:selectOneChoice label="Mes" id="soc1u" visible="false" binding="#{CustomsBean.poUpdateMonth}">
+                                                    <af:selectItem label="ENERO" value="ENERO" id="si1u"/>
+                                                    <af:selectItem label="FEBRERO" value="FEBRERO" id="si2u"/>
+                                                    <af:selectItem label="MARZO" value="MARZO" id="si3u"/>
+                                                    <af:selectItem label="ABRIL" value="ABRIL" id="si4u"/>
+                                                    <af:selectItem label="MAYO" value="MAYO" id="si5u"/>
+                                                    <af:selectItem label="JUNIO" value="JUNIO" id="si6u"/>
+                                                    <af:selectItem label="JULIO" value="JULIO" id="si7u"/>
+                                                    <af:selectItem label="AGOSTO" value="AGOSTO" id="si8u"/>
+                                                    <af:selectItem label="SEPTIEMBRE" value="SEPTIEMBRE" id="si9u"/>
+                                                    <af:selectItem label="OCTUBRE" value="OCTUBRE" id="si10u"/>
+                                                    <af:selectItem label="NOVIEMBRE" value="NOVIEMBRE" id="si11u"/>
+                                                    <af:selectItem label="DICIEMBRE" value="DICIEMBRE" id="si12u"/>
+                                                </af:selectOneChoice>
+                                        <af:inputText id="TxtUpdateRFC" label="RFC"
+                                                      columns="20"
+                                                      binding="#{CustomsBean.poUpdateRfc}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtUpdateNomClient"
+                                                      label="Cliente" columns="20"
+                                                      binding="#{CustomsBean.poUpdateCompany}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtUpdateAddress"
+                                                      label="Dirección" columns="20"
+                                                      binding="#{CustomsBean.poUpdateAddress}">
+                                        </af:inputText>
+                                        <af:inputText id="TxtUpdateTel" label="Teléfono"
+                                                      columns="20"
+                                                      binding="#{CustomsBean.poUpdatePhoneNumber}">
+                                        </af:inputText>                          
+                                    <af:selectBooleanCheckbox text="" label="Estatus" id="sbcUpdateSta"
+                                                              binding="#{CustomsBean.poUpdateStatus}"/>
+                                    
+                                <af:separator id="sepTitleEncEd"/>
+                                    
+                                <af:spacer width="10" height="10" id="SpUpdParameter02"/>
+                            </af:panelFormLayout>
+                            <af:panelGroupLayout id="PnlFrmBtnsPgUpd">
+                                <af:button text="Aceptar" id="BtnAceptUpdWs" icon="/images/aceptar.gif"
+                                            shortDesc="Guardar"
+                                           action="#{CustomsBean.updateAction}"/>
+                                <af:spacer width="10" height="10" id="SpcUpd111"/>
+                                <af:button text="Cancelar" id="BtnCancelUpd" icon="/images/cancelar.gif" 
+                                shortDesc="Cierra el Popup." immediate="true"
+                                           action="#{CustomsBean.cancelUpdateAction}"/>
+                            </af:panelGroupLayout>
+                        </af:panelGroupLayout>
+                    </af:panelWindow>
+                </af:popup>
+                
+                <!-- ################################### POPUP LOADING .... ##################################### !-->
+                <af:popup id="popLoading" contentDelivery="immediate">
+                  <af:dialog id="dlgLoading" type="none" title="Procesando Información" closeIconVisible="false">
+                    <af:panelGroupLayout id="PnlLoading" layout="vertical" halign="center">
+                      <af:image source="/images/atom-logo.gif" id="ImgIdxLoad" shortDesc="Cargando..."/>
+                      <af:outputText value="... por favor espere." id="LblIdxLoad1Login"/>
+                    </af:panelGroupLayout>
+                  </af:dialog>
+                </af:popup>
+                <!-- ################################### POPUP MAILS .... ##################################### !-->
+                 <af:popup id="popShowMails" contentDelivery="lazyUncached" binding="#{CustomsBean.poPopupMails}">
+                  <af:panelWindow id="PnlShowAgencia" inlineStyle="border-style:none; width:80em; height:38em;" modal="true" clientComponent="true" closeIconVisible="true" title="Provedores" titleIconSource="/images/page_component.gif" >
+                    <af:panelGroupLayout layout="vertical" id="PnlShowMsg" styleClass="AFStretchWidth" inlineStyle="border-style:none; height:38.0em;" valign="middle" halign="left">
+                     <af:panelGroupLayout layout="vertical" id="PnlData" inlineStyle="border-style:none;" valign="middle" halign="left">
+                        <af:inputText id="TxtRFCPro" label=" "
+                                      columns="100" readOnly="true"
+                                      binding="#{CustomsBean.poRfcCte}" inlineStyle="font-weight:bold;">
+                        </af:inputText>
+                        <af:inputText id="TxtCtePro" label=" "
+                                      columns="150"  readOnly="true"
+                                      binding="#{CustomsBean.poCteDesc}" inlineStyle="font-weight:bold;">
+                        </af:inputText>
+                        <af:inputText id="TxtidCtePro" label=" " visible="false"
+                                      columns="150"  readOnly="true"
+                                      binding="#{CustomsBean.poIdCteDesc}">
+                        </af:inputText>
+                    </af:panelGroupLayout>
+                    <af:spacer id="SpcAx3" width="10" height="5"/>
+                    <af:panelGridLayout id="pglf2">
+                    <af:gridRow marginTop="5px" height="auto" marginBottom="5px" id="gr1">
+                        <af:gridCell marginStart="5px" width="28%" id="gc1">
+                            <af:panelGroupLayout layout="vertical" id="PnlData2" inlineStyle="border-style:none;" valign="middle" halign="center">
+                                <af:panelFormLayout id="PnlSearchEm2" rows="10" maxColumns="1">
+                                <af:inputText label="Email"
+                                              id="itNewMail" partialTriggers="BtnClEm"
+                                              binding="#{CustomsBean.poCrudEmail}">
+                                </af:inputText>
+                                <af:inputText label="Titular"
+                                              id="itTit" partialTriggers="BtnClEm"
+                                              binding="#{CustomsBean.poCrudTitular}">
+                                </af:inputText>
+                                </af:panelFormLayout>
+                                <af:spacer id="SpcsAx3" width="10" height="10"/>
+                                <af:panelGroupLayout id="PnlFrmBtnsEmail" halign="center">
+                                    <af:button text="Guardar" id="BtnAceptEm" icon="/images/aceptar.gif"
+                                               shortDesc="Guardar"
+                                               action="#{CustomsBean.saveEmailAction}"/>
+                                    <af:spacer width="10" height="10" id="SpcRm"/>
+                                    <af:button text="Limpiar" id="BtnClEm" icon="/images/action_refresh_blue.gif"
+                                               shortDesc="Limpiar Campos"
+                                               action="#{CustomsBean.refreshEmailAction}"/>                                    
+                                </af:panelGroupLayout>
+                            </af:panelGroupLayout>
+			</af:gridCell>
+                        <af:gridCell marginStart="1px" width="72%" marginEnd="3px" id="gc2">
+                            <af:panelGroupLayout id="pgl2" layout="scroll">
+                            <!--################ TABLA DE EMAILS ############################ -->
+                            <af:table value="#{bindings.OlsCatSatMailsCtesTabView1.collectionModel}" var="row"
+                                      rows="#{bindings.OlsCatSatMailsCtesTabView1.rangeSize}"
+                                      emptyText="#{bindings.OlsCatSatMailsCtesTabView1.viewable ? 'Sin Información.' : 'Access Denied.'}"
+                                      rowBandingInterval="0"
+                                      selectedRowKeys="#{bindings.OlsCatSatMailsCtesTabView1.collectionModel.selectedRow}"
+                                      selectionListener="#{bindings.OlsCatSatMailsCtesTabView1.collectionModel.makeCurrent}"
+                                      rowSelection="single" fetchSize="#{bindings.OlsCatSatMailsCtesTabView1.rangeSize}"
+                                      styleClass="AFStretchWidth" 
+                                      columnStretching="column:c36"
+                                      binding="#{CustomsBean.poTblEmails}"
+                                      id="t1" autoHeightRows="15">
+                                <af:column align="center" id="colvieweb2"
+                                        frozen="true" sortable="false"
+                                        width="60">
+                                    <f:facet name="header">
+                                    <af:group id="g2view2">
+                                        <af:outputText value="Eliminar" id="ot154vie2w"/>
+                                    </af:group>
+                                    </f:facet>
+                                    <af:panelGroupLayout layout="horizontal"
+                                                        id="PnlOpcview2" valign="top"
+                                                        halign="left">
+                                        
+                                        <af:button text=" " id="BtnDelEm" icon="/images/cancelar.gif" 
+                                                   shortDesc="Eliminar Dirección de Correo" immediate="true"
+                                           action="#{CustomsBean.deleteEmailAction}"/>
+                                        
+                                             <!--      
+                                        <af:link icon="/images/cancelar.gif"
+                                                 id="Lnkview2"
+                                                 inlineStyle="text-align:center;"
+                                                 visible="true"
+                                                 actionListener="#{CustomsBean.deleteEmailActionListener}"
+                                                 shortDesc="Eliminar Dirección de Correo">
+                                        </af:link>-->
+                                    </af:panelGroupLayout>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.OlsCatSatMailsCtesTabView1.hints.IdMail.name}"
+                                           sortable="true" visible="false"
+                                           headerText="#{bindings.OlsCatSatMailsCtesTabView1.hints.IdMail.label}"
+                                           id="c33">
+                                    <af:outputText value="#{row.IdMail}"
+                                                   shortDesc="#{bindings.OlsCatSatMailsCtesTabView1.hints.IdMail.tooltip}"
+                                                   id="ot11">
+                                        <af:convertNumber groupingUsed="false"
+                                                          pattern="#{bindings.OlsCatSatMailsCtesTabView1.hints.IdMail.format}"/>
+                                    </af:outputText>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.OlsCatSatMailsCtesTabView1.hints.IdClientSat.name}"
+                                           sortable="true" visible="false"
+                                           headerText="#{bindings.OlsCatSatMailsCtesTabView1.hints.IdClientSat.label}"
+                                           id="c34">
+                                    <af:outputText value="#{row.IdClientSat}"
+                                                   shortDesc="#{bindings.OlsCatSatMailsCtesTabView1.hints.IdClientSat.tooltip}"
+                                                   id="ot33">
+                                        <af:convertNumber groupingUsed="false"
+                                                          pattern="#{bindings.OlsCatSatMailsCtesTabView1.hints.IdClientSat.format}"/>
+                                    </af:outputText>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.OlsCatSatMailsCtesTabView1.hints.IndRfc.name}"
+                                           sortable="true" visible="false"
+                                           headerText="#{bindings.OlsCatSatMailsCtesTabView1.hints.IndRfc.label}"
+                                           id="c35">
+                                    <af:outputText value="#{row.IndRfc}"
+                                                   shortDesc="#{bindings.OlsCatSatMailsCtesTabView1.hints.IndRfc.tooltip}"
+                                                   id="ot34"/>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.OlsCatSatMailsCtesTabView1.hints.IndEmail.name}"
+                                           sortable="true" align="center" width="150"
+                                           headerText="Email"
+                                           id="c37">
+                                    <af:outputText value="#{row.IndEmail}"
+                                                   shortDesc="#{bindings.OlsCatSatMailsCtesTabView1.hints.IndEmail.tooltip}"
+                                                   id="ot36"/>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.OlsCatSatMailsCtesTabView1.hints.IndAddress.name}"
+                                           sortable="true" align="center" width="350"
+                                           headerText="Titular"
+                                           id="c36">
+                                    <af:outputText value="#{row.IndAddress}"
+                                                   shortDesc="#{bindings.OlsCatSatMailsCtesTabView1.hints.IndAddress.tooltip}"
+                                                   id="ot35"/>
+                                </af:column>                                
+                            </af:table>
+                            </af:panelGroupLayout>
+                         </af:gridCell>
+                    </af:gridRow>
+                    </af:panelGridLayout>
+                    </af:panelGroupLayout>
+                  </af:panelWindow>
+                </af:popup>
+            
+                
+                 <!-- ################################### POPUP PROVEEDORES ##################################### !-->
+                 <af:popup id="popShowProv" contentDelivery="lazyUncached" binding="#{CustomsBean.poPopupProv}">
+                  <af:panelWindow id="PnlShowInc" inlineStyle="border-style:none; width:70em; height:35em;" modal="false" clientComponent="true" closeIconVisible="true" title="Proveedores" titleIconSource="/images/page_component.gif" >
+                    <af:panelGroupLayout layout="vertical" id="PnlShowMsgInc" styleClass="AFStretchWidth" inlineStyle="border-style:none; height:30.0em;" valign="middle" halign="left">
+                    <af:panelGroupLayout layout="vertical" id="PnlDataInc" inlineStyle="border-style:none;" valign="middle" halign="left">
+                        <af:inputText id="TxtRFCInc" label=" "
+                                      columns="20" readOnly="true"
+                                      binding="#{CustomsBean.poRfcProv}" inlineStyle="font-weight:bold;">
+                        </af:inputText>
+                        <af:inputText id="TxtCteInc" label=" "
+                                      columns="150" readOnly="true"
+                                      binding="#{CustomsBean.poCteProv}" inlineStyle="font-weight:bold;">
+                        </af:inputText>
+                    </af:panelGroupLayout>
+                    <!--<af:spacer id="SpcAx3Inc" width="5" height="5"/>-->
+                    
+                    <af:link icon="/images/excel.gif"
+                                       id="LnkExel2"
+                                       inlineStyle="text-align:center;"                                                   
+                                       shortDesc="Exportar a Excel">
+                        <af:exportCollectionActionListener exportedId="t2"
+                                                   type="excelHTML"
+                                                   filename="providersXLS.xls"/>
+                    </af:link>
+                    
+                    <af:separator id="sepHdrInc"/>   
+                      <!--################ TABLA PROVEEDORES ############################ -->
+                       <af:panelGroupLayout layout="scroll" id="PnlGrpIterInc" valign="middle" halign="left">
+                                <af:table value="#{bindings.OlsCatSatProvidersOlsTabView1.collectionModel}" var="row"
+                                          rows="#{bindings.OlsCatSatProvidersOlsTabView1.rangeSize}"
+                                          emptyText="#{bindings.OlsCatSatProvidersOlsTabView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                          rowBandingInterval="0"
+                                          selectedRowKeys="#{bindings.OlsCatSatProvidersOlsTabView1.collectionModel.selectedRow}"
+                                          selectionListener="#{bindings.OlsCatSatProvidersOlsTabView1.collectionModel.makeCurrent}"
+                                          rowSelection="single"
+                                          autoHeightRows="10"
+                                          columnStretching="column:c47"
+                                          styleClass="AFStretchWidth" 
+                                      binding="#{CustomsBean.poTblProviders}"
+                                          fetchSize="#{bindings.OlsCatSatProvidersOlsTabView1.rangeSize}" id="t2">
+                                    
+                                    <af:column align="center" id="colProvDel"
+                                                frozen="true" sortable="false"
+                                                width="85">
+                                            <f:facet name="header">
+                                            <af:group id="g2ProvDel">
+                                                <af:outputText value="Eliminar" id="ot154ProvDel"/>
+                                            </af:group>
+                                            </f:facet>
+                                            <af:panelGroupLayout layout="horizontal"
+                                                                id="PnlOpcProvDel" valign="top"
+                                                                halign="left">
+                                                                
+                                                 <af:button text=" " id="BtnDelProv" icon="/images/trash_delete.gif"
+                                                   shortDesc="Eliminar Provedor" immediate="true"
+                                           action="#{CustomsBean.deleteProvidersAction}"/>
+                                        
+                                                  <!--              
+                                                <af:link icon="/images/trash_delete.gif"
+                                                         id="LnkProvDel"
+                                                         inlineStyle="text-align:center;"
+                                                         visible="true"
+                                                         immediate="true"
+                                                         action="#{CustomsBean.deleteProvidersAction}"
+                                                         shortDesc="Eliminar Proveedor de este Cliente">
+                                                </af:link>-->
+                                            </af:panelGroupLayout>
+                                        </af:column>
+                                        
+                                    
+                                    
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdProvider.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdProvider.label}"
+                                               id="c38">
+                                        <af:outputText value="#{row.IdProvider}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdProvider.tooltip}"
+                                                       id="ot37">
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdProvider.format}"/>
+                                        </af:outputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdClientSat.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdClientSat.label}"
+                                               id="c39">
+                                        <af:outputText value="#{row.IdClientSat}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdClientSat.tooltip}"
+                                                       id="ot38">
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdClientSat.format}"/>
+                                        </af:outputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdRequest.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdRequest.label}"
+                                               id="c40">
+                                        <af:outputText value="#{row.IdRequest}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdRequest.tooltip}"
+                                                       id="ot39">
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdRequest.format}"/>
+                                        </af:outputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndYear.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndYear.label}"
+                                               id="c41">
+                                        <af:outputText value="#{row.IndYear}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndYear.tooltip}"
+                                                       id="ot40">
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndYear.format}"/>
+                                        </af:outputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndMonth.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndMonth.label}"
+                                               id="c42">
+                                        <af:outputText value="#{row.IndMonth}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndMonth.tooltip}"
+                                                       id="ot41">
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndMonth.format}"/>
+                                        </af:outputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndPeriod.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndPeriod.label}"
+                                               id="c43">
+                                        <af:outputText value="#{row.IndPeriod}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndPeriod.tooltip}"
+                                                       id="ot42"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdLawFirm.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdLawFirm.label}"
+                                               id="c44">
+                                        <af:outputText value="#{row.IdLawFirm}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdLawFirm.tooltip}"
+                                                       id="ot43">
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IdLawFirm.format}"/>
+                                        </af:outputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndRfcClient.name}"
+                                               sortable="true" align="center"
+                                               headerText="Cliente"
+                                               id="c45">
+                                        <af:outputText value="#{row.IndRfcClient}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndRfcClient.tooltip}"
+                                                       id="ot44"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndRfc.name}"
+                                               sortable="true" align="center"
+                                               headerText="Proveedor"
+                                               id="c46">
+                                        <af:outputText value="#{row.IndRfc}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndRfc.tooltip}"
+                                                       id="ot45"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndCompany.name}"
+                                               sortable="true" align="center"
+                                               headerText="Nombre del Proveedor"
+                                               id="c47">
+                                        <af:outputText value="#{row.IndCompany}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndCompany.tooltip}"
+                                                       id="ot46"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndAddress.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndAddress.label}"
+                                               id="c48">
+                                        <af:outputText value="#{row.IndAddress}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndAddress.tooltip}"
+                                                       id="ot47"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndEmail.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndEmail.label}"
+                                               id="c49">
+                                        <af:outputText value="#{row.IndEmail}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndEmail.tooltip}"
+                                                       id="ot48"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndPhoneNumber.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndPhoneNumber.label}"
+                                               id="c50">
+                                        <af:outputText value="#{row.IndPhoneNumber}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndPhoneNumber.tooltip}"
+                                                       id="ot49"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndEstatus.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndEstatus.label}"
+                                               id="c51">
+                                        <af:outputText value="#{row.IndEstatus}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.IndEstatus.tooltip}"
+                                                       id="ot50"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.AttributeCategory.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.AttributeCategory.label}"
+                                               id="c52">
+                                        <af:outputText value="#{row.AttributeCategory}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.AttributeCategory.tooltip}"
+                                                       id="ot51"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute1.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute1.label}"
+                                               id="c53">
+                                        <af:outputText value="#{row.Attribute1}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute1.tooltip}"
+                                                       id="ot52"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute2.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute2.label}"
+                                               id="c54">
+                                        <af:outputText value="#{row.Attribute2}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute2.tooltip}"
+                                                       id="ot53"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute3.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute3.label}"
+                                               id="c55">
+                                        <af:outputText value="#{row.Attribute3}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute3.tooltip}"
+                                                       id="ot54"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute4.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute4.label}"
+                                               id="c56">
+                                        <af:outputText value="#{row.Attribute4}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute4.tooltip}"
+                                                       id="ot55"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute5.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute5.label}"
+                                               id="c57">
+                                        <af:outputText value="#{row.Attribute5}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute5.tooltip}"
+                                                       id="ot56"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute6.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute6.label}"
+                                               id="c58">
+                                        <af:outputText value="#{row.Attribute6}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute6.tooltip}"
+                                                       id="ot57"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute7.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute7.label}"
+                                               id="c59">
+                                        <af:outputText value="#{row.Attribute7}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute7.tooltip}"
+                                                       id="ot58"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute8.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute8.label}"
+                                               id="c60">
+                                        <af:outputText value="#{row.Attribute8}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute8.tooltip}"
+                                                       id="ot59"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute9.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute9.label}"
+                                               id="c61">
+                                        <af:outputText value="#{row.Attribute9}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute9.tooltip}"
+                                                       id="ot60"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute10.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute10.label}"
+                                               id="c62">
+                                        <af:outputText value="#{row.Attribute10}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute10.tooltip}"
+                                                       id="ot61"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute11.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute11.label}"
+                                               id="c63">
+                                        <af:outputText value="#{row.Attribute11}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute11.tooltip}"
+                                                       id="ot62"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute12.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute12.label}"
+                                               id="c64">
+                                        <af:outputText value="#{row.Attribute12}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute12.tooltip}"
+                                                       id="ot63"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute13.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute13.label}"
+                                               id="c65">
+                                        <af:outputText value="#{row.Attribute13}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute13.tooltip}"
+                                                       id="ot64"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute14.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute14.label}"
+                                               id="c66">
+                                        <af:outputText value="#{row.Attribute14}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute14.tooltip}"
+                                                       id="ot65"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute15.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute15.label}"
+                                               id="c67">
+                                        <af:outputText value="#{row.Attribute15}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.Attribute15.tooltip}"
+                                                       id="ot66"/>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.FecCreationDate.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.FecCreationDate.label}"
+                                               id="c68">
+                                        <af:outputText value="#{row.FecCreationDate}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.FecCreationDate.tooltip}"
+                                                       id="ot67">
+                                            <af:convertDateTime pattern="#{bindings.OlsCatSatProvidersOlsTabView1.hints.FecCreationDate.format}"/>
+                                        </af:outputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.NumCreatedBy.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.NumCreatedBy.label}"
+                                               id="c69">
+                                        <af:outputText value="#{row.NumCreatedBy}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.NumCreatedBy.tooltip}"
+                                                       id="ot68">
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.OlsCatSatProvidersOlsTabView1.hints.NumCreatedBy.format}"/>
+                                        </af:outputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.FecLastUpdateDate.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.FecLastUpdateDate.label}"
+                                               id="c70">
+                                        <af:outputText value="#{row.FecLastUpdateDate}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.FecLastUpdateDate.tooltip}"
+                                                       id="ot69">
+                                            <af:convertDateTime pattern="#{bindings.OlsCatSatProvidersOlsTabView1.hints.FecLastUpdateDate.format}"/>
+                                        </af:outputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.NumLastUpdatedBy.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.NumLastUpdatedBy.label}"
+                                               id="c71">
+                                        <af:outputText value="#{row.NumLastUpdatedBy}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.NumLastUpdatedBy.tooltip}"
+                                                       id="ot70">
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.OlsCatSatProvidersOlsTabView1.hints.NumLastUpdatedBy.format}"/>
+                                        </af:outputText>
+                                    </af:column>
+                                    <af:column sortProperty="#{bindings.OlsCatSatProvidersOlsTabView1.hints.NumLastUpdateLogin.name}"
+                                               sortable="true" visible="false"
+                                               headerText="#{bindings.OlsCatSatProvidersOlsTabView1.hints.NumLastUpdateLogin.label}"
+                                               id="c72">
+                                        <af:outputText value="#{row.NumLastUpdateLogin}"
+                                                       shortDesc="#{bindings.OlsCatSatProvidersOlsTabView1.hints.NumLastUpdateLogin.tooltip}"
+                                                       id="ot71">
+                                            <af:convertNumber groupingUsed="false"
+                                                              pattern="#{bindings.OlsCatSatProvidersOlsTabView1.hints.NumLastUpdateLogin.format}"/>
+                                        </af:outputText>
+                                    </af:column>
+                                </af:table>
+                            </af:panelGroupLayout>
+                    </af:panelGroupLayout>
+                  </af:panelWindow>
+                </af:popup>
+                
+                
+            
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>

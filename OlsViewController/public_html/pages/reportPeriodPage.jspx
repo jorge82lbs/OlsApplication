@@ -1,0 +1,288 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document title="Reporte Por Periodo" id="d1" smallIconSource="/images/web-icon16x16.png">
+            <af:messages id="m1"/>
+            <af:form id="f1" >
+            <af:resource type="javascript">
+                    function enforcePreventUserInput(evt) {                    
+                        var popup = AdfPage.PAGE.findComponentByAbsoluteId('p1oadLogin');
+                        if (popup != null) {
+                            AdfPage.PAGE.addBusyStateListener(popup, handleBusyState);
+                            evt.preventUserInput();
+                        }
+                    }
+                
+                    function handleBusyState(evt) {
+                        var popup = AdfPage.PAGE.findComponentByAbsoluteId('p1oadLogin');
+                        if (popup != null) {
+                            if (evt.isBusy()) {
+                                popup.show();
+                            }
+                            else {
+                                popup.hide();
+                                AdfPage.PAGE.removeBusyStateListener(popup, handleBusyState);
+                            }
+                        }
+                    }        
+                </af:resource>
+                <af:pageTemplate viewId="/templates/olsTemplate.jspx" id="pt1">
+                    <f:facet name="content">
+                    <af:panelGroupLayout layout="scroll" id="PnlCont"
+                                             inlineStyle="border-style:none;">
+                            <af:panelHeader text="Listas SAT - Por Periodo" id="PnlHead"
+                                type="default"
+                                messageType="none"
+                                shortDesc="Listas SAT - Por Periodo"
+                                inlineStyle="border-style:none;">
+                            <f:facet name="toolbar">
+                                <af:statusIndicator id="StiIndicator" shortDesc="Status Indicator"/>
+                            </f:facet>
+                            </af:panelHeader>
+                            <af:separator id="sepTitle"/>
+                            <af:panelGroupLayout layout="horizontal" id="PnlParGenTbl" styleClass="AFStretchWidth"
+                                                 valign="top" halign="left" 
+                                                 inlineStyle="border-style:none; height:415px;">
+                            <af:panelSplitter id="PnlSplitMain" splitterPosition="302"
+                                      inlineStyle="width:1350px; "
+                                      collapsed="false"
+                                      firstBorder="skin">
+                                <f:facet name="first">
+                                    <af:panelGroupLayout layout="scroll"
+                                                         xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+                                                         id="PnlGpAln">
+                                          <af:outputFormatted value="Buscar Parámetro" id="LblBscParGen"
+                                                            inlineStyle="color:Olive; font-weight:bold; 
+                                                            font-size:small; text-align:left;"/>
+                                        <af:separator id="sdedew"/>
+                                        <af:panelGroupLayout layout="horizontal" id="PnlUtil" halign="right"
+                                                            inlineStyle="border-style:none;">
+                                            <af:link text=" " id="BtnReset" 
+                                                    icon="/images/action_refresh_blue.gif" 
+                                                    partialSubmit="true"
+                                                    shortDesc="Reiniciar valores de búsqueda"
+                                                    actionListener="#{ReportPeriodBean.resetFilterValues}">
+                                            </af:link>
+                                            <af:spacer id="SpcAx" width="10" height="5"/>
+                                            
+                                            <af:link icon="/images/excel.gif"
+                                                               id="LnkExel"
+                                                               inlineStyle="text-align:center;"                                                   
+                                                               shortDesc="Exportar a Excel">
+                                                               <!--
+                                                <af:exportCollectionActionListener exportedId="tblMain"
+                                                                           type="excelHTML"
+                                                                           filename="periodosXLS.xls"/>-->
+                                            </af:link>
+                                            <af:spacer id="SpcAxTbl" width="10" height="5"/>
+                                            <af:link text=" " id="BtnResetTbl"
+                                                            icon="/images/restaurar.gif" 
+                                                            shortDesc="Reiniciar tabla"
+                                                     action="#{ReportPeriodBean.refreshMainTable}">
+                                            </af:link>
+                                        </af:panelGroupLayout>
+                                        <af:panelFormLayout id="PnlSearch" rows="14"
+                                                          maxColumns="1">
+                                            <af:inputNumberSpinbox label="Año" id="TxtAnio3" 
+                                                        binding="#{ReportPeriodBean.poFilterYear}" minimum="2017"
+                                                        partialTriggers="BtnReset"
+                                                        columns="5"/>
+                                        <af:selectOneChoice label="Mes" id="soc1" 
+                                        binding="#{ReportPeriodBean.poFilterMonth}"
+                                         partialTriggers="BtnReset">
+                                                    <af:selectItem label="ENERO" value="ENERO" id="si1"/>
+                                                    <af:selectItem label="FEBRERO" value="FEBRERO" id="si2"/>
+                                                    <af:selectItem label="MARZO" value="MARZO" id="si3"/>
+                                                    <af:selectItem label="ABRIL" value="ABRIL" id="si4"/>
+                                                    <af:selectItem label="MAYO" value="MAYO" id="si5"/>
+                                                    <af:selectItem label="JUNIO" value="JUNIO" id="si6"/>
+                                                    <af:selectItem label="JULIO" value="JULIO" id="si7"/>
+                                                    <af:selectItem label="AGOSTO" value="AGOSTO" id="si8"/>
+                                                    <af:selectItem label="SEPTIEMBRE" value="SEPTIEMBRE" id="si9"/>
+                                                    <af:selectItem label="OCTUBRE" value="OCTUBRE" id="si10"/>
+                                                    <af:selectItem label="NOVIEMBRE" value="NOVIEMBRE" id="si11"/>
+                                                    <af:selectItem label="DICIEMBRE" value="DICIEMBRE" id="si12"/>
+                                                </af:selectOneChoice>
+                                                          
+                                            <af:inputText label="Rfc"                                                  
+                                                  id="TxtFilterRfc"
+                                                  partialTriggers="BtnReset"
+                                                  binding="#{ReportPeriodBean.poFilterRfc}"/>
+                                                  
+                                           <af:inputText label="Cliente"                                                  
+                                                  id="TxtFilterCliente"
+                                                  partialTriggers="BtnReset"
+                                                  binding="#{ReportPeriodBean.poFilterCliente}"/>
+                                                  
+                                            <af:selectBooleanCheckbox text="Limpios" label=""
+                                                                      id="sbc1"
+                                                                      partialTriggers="BtnReset sbc4 sbc3 sbc2"
+                                                                      binding="#{ReportPeriodBean.poFilterChkClean}"
+                                                                      valueChangeListener="#{ReportPeriodBean.selectCleanAction}"
+                                                                      autoSubmit="true"/>
+                                            <af:selectBooleanCheckbox text="Presuntos" label=""
+                                                                      id="sbc4"
+                                                                      valueChangeListener="#{ReportPeriodBean.setCleanChecBox3Action}"
+                                                                      partialTriggers="BtnReset sbc1"
+                                                                      autoSubmit="true"
+                                                                      binding="#{ReportPeriodBean.poFilterChkPre}"/>                                            
+                                            <af:selectBooleanCheckbox text="Definitivos" label=""
+                                                                      id="sbc3"
+                                                                      valueChangeListener="#{ReportPeriodBean.setCleanChecBox2Action}"
+                                                                      partialTriggers="BtnReset sbc1"
+                                                                      autoSubmit="true"
+                                                                      binding="#{ReportPeriodBean.poFilterChkDef}"/>
+                                            <af:selectBooleanCheckbox text="Inclumplidos" label=""
+                                                                      id="sbc2"
+                                                                      valueChangeListener="#{ReportPeriodBean.setCleanChecBoxAction}"
+                                                                      partialTriggers="BtnReset sbc1"
+                                                                      autoSubmit="true"
+                                                                      binding="#{ReportPeriodBean.poFilterChkInc}"/>
+                                        <af:spacer width="10" height="10" id="s33"/>
+                                        <af:button text="Buscar por Filtros"
+                                                  id="BtnSearch" 
+                                                  icon="/images/ver_orden.gif"
+                                                  shortDesc="Buscar Elementos"
+                                                  action="#{ReportPeriodBean.searchFilterAction}"/>
+                                      </af:panelFormLayout>
+                                    </af:panelGroupLayout>
+                                  </f:facet>
+                                  <f:facet name="second">
+                                  <!-- ################################### TABLA PRINCIPAL ##################################################### !-->
+                                        <af:table value="#{bindings.OlsSatClientsByPeriodVw1.collectionModel}" var="row"
+                                                  rows="#{bindings.OlsSatClientsByPeriodVw1.rangeSize}"
+                                                  emptyText="#{bindings.OlsSatClientsByPeriodVw1.viewable ? 'Sin Información para Mostrar.' : 'Acceso Denegado.'}"
+                                                  rowBandingInterval="0"
+                                                  selectedRowKeys="#{bindings.OlsSatClientsByPeriodVw1.collectionModel.selectedRow}"
+                                                  selectionListener="#{bindings.OlsSatClientsByPeriodVw1.collectionModel.makeCurrent}"
+                                                  rowSelection="single"
+                                                  fetchSize="#{bindings.OlsSatClientsByPeriodVw1.rangeSize}" 
+                                                  styleClass="AFStretchWidth"
+                                      columnStretching="column:c9"
+                                      varStatus="vs" id="tblMain" autoHeightRows="25"
+                                      binding="#{ReportPeriodBean.poTblMain}">
+                                            <af:column sortProperty="#{bindings.OlsSatClientsByPeriodVw1.hints.RowId1.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsSatClientsByPeriodVw1.hints.RowId1.label}"
+                                                       id="c1">
+                                                <af:outputText value="#{row.RowId1}"
+                                                               shortDesc="#{bindings.OlsSatClientsByPeriodVw1.hints.RowId1.tooltip}"
+                                                               id="ot1"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsSatClientsByPeriodVw1.hints.IndYearPrm.name}"
+                                                       sortable="true" align="center" width="100"
+                                                       headerText="Año"
+                                                       id="c2">
+                                                <af:outputText value="#{row.IndYearPrm}"
+                                                               shortDesc="#{bindings.OlsSatClientsByPeriodVw1.hints.IndYearPrm.tooltip}"
+                                                               id="ot2"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsSatClientsByPeriodVw1.hints.IndMonthPrm.name}"
+                                                       sortable="true" align="center" width="100"
+                                                       headerText="Mes"
+                                                       id="c3">
+                                                <af:outputText value="#{row.IndMonthPrm}"
+                                                               shortDesc="#{bindings.OlsSatClientsByPeriodVw1.hints.IndMonthPrm.tooltip}"
+                                                               id="ot3"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsSatClientsByPeriodVw1.hints.IdClientSat.name}"
+                                                       sortable="true" visible="false"
+                                                       headerText="#{bindings.OlsSatClientsByPeriodVw1.hints.IdClientSat.label}"
+                                                       id="c4">
+                                                <af:outputText value="#{row.IdClientSat}"
+                                                               shortDesc="#{bindings.OlsSatClientsByPeriodVw1.hints.IdClientSat.tooltip}"
+                                                               id="ot4">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsSatClientsByPeriodVw1.hints.IdClientSat.format}"/>
+                                                </af:outputText>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsSatClientsByPeriodVw1.hints.IndRfc.name}"
+                                                       sortable="true" align="center" width="150"
+                                                       headerText="RFC"
+                                                       id="c5">
+                                                <af:outputText value="#{row.IndRfc}"
+                                                               shortDesc="#{bindings.OlsSatClientsByPeriodVw1.hints.IndRfc.tooltip}"
+                                                               id="ot5"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsSatClientsByPeriodVw1.hints.IndCompany.name}"
+                                                       sortable="true" align="center" width="250"
+                                                       headerText="Nombre del Cliente"
+                                                       id="c6">
+                                                <af:outputText value="#{row.IndCompany}"
+                                                               shortDesc="#{bindings.OlsSatClientsByPeriodVw1.hints.IndCompany.tooltip}"
+                                                               id="ot6"/>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsSatClientsByPeriodVw1.hints.Alleged.name}"
+                                                       sortable="true" align="center" width="100"
+                                                       headerText="PRESUNTO"
+                                                       id="c7">
+                                                <af:link text=" " id="BtnStop" 
+                                                     icon="/images/flag_blue.gif"
+                                                     visible="#{row.Alleged == 1}"
+                                                     shortDesc="Presunto">
+                                                </af:link>
+                                                       <!--
+                                                <af:outputText value="#{row.Alleged}"
+                                                               shortDesc="#{bindings.OlsSatClientsByPeriodVw1.hints.Alleged.tooltip}"
+                                                               id="ot7">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsSatClientsByPeriodVw1.hints.Alleged.format}"/>
+                                                </af:outputText>
+                                                -->
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsSatClientsByPeriodVw1.hints.Definitive.name}"
+                                                       sortable="true" align="center" width="100"
+                                                       headerText="DEFINITIVO"
+                                                       id="c8">
+                                                       <af:link text=" " id="BtnStop2" 
+                                                     icon="/images/flag_orange.gif"
+                                                     visible="#{row.Definitive == 1}"
+                                                     shortDesc="Definitive">
+                                            </af:link>
+                                            <!--
+                                                <af:outputText value="#{row.Definitive}"
+                                                               shortDesc="#{bindings.OlsSatClientsByPeriodVw1.hints.Definitive.tooltip}"
+                                                               id="ot8">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsSatClientsByPeriodVw1.hints.Definitive.format}"/>
+                                                </af:outputText>-->
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.OlsSatClientsByPeriodVw1.hints.Unfulfilled.name}"
+                                                       sortable="true" align="center" width="100"
+                                                       headerText="INCUMPLIDO"
+                                                       id="c9">
+                                            <af:link text=" " id="BtnStop32" 
+                                                     icon="/images/flag_red.gif"
+                                                     visible="#{row.Unfulfilled == 1}"
+                                                     shortDesc="Unfulfilled">
+                                            </af:link><!---
+                                                <af:outputText value="#{row.Unfulfilled}"
+                                                               shortDesc="#{bindings.OlsSatClientsByPeriodVw1.hints.Unfulfilled.tooltip}"
+                                                               id="ot9">
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.OlsSatClientsByPeriodVw1.hints.Unfulfilled.format}"/>
+                                                </af:outputText>-->
+                                            </af:column>
+                                        </af:table>
+                                    </f:facet>
+                            </af:panelSplitter>
+                            </af:panelGroupLayout>
+                        </af:panelGroupLayout>                                        
+                    
+                    </f:facet>
+                </af:pageTemplate>
+                <!-- ################################### POPUP LOADING .... ##################################### !-->
+                <af:popup id="popLoading" contentDelivery="immediate">
+                  <af:dialog id="dlgLoading" type="none" title="Procesando Información" closeIconVisible="false">
+                    <af:panelGroupLayout id="PnlLoading" layout="vertical" halign="center">
+                      <af:image source="/images/atom-logo.gif" id="ImgIdxLoad" shortDesc="Cargando..."/>
+                      <af:outputText value="... por favor espere." id="LblIdxLoad1Login"/>
+                    </af:panelGroupLayout>
+                  </af:dialog>
+                </af:popup>
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>
